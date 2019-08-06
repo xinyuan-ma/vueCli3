@@ -1,4 +1,3 @@
-console.log(222222)
 let url = ''
 console.log(process.env.VUE_APP_YUAN, 'process.env.VUE_APP_YUAN')
 switch (process.env.VUE_APP_YUAN) {

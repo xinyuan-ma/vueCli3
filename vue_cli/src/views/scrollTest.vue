@@ -19,7 +19,6 @@ export default {
 		}
 	},
 	mounted () {
-		console.log(4442435)
 	},
 	methods: {
 		handleScroll () {
