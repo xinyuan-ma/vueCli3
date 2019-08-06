@@ -1,15 +1,17 @@
 const path = require('path')
-
-const resolve = dir => path.join(__dirname, dir)
+let pageMethod = require('./utils/getPages.js')
+pages = pageMethod.pages()
+// const resolve = dir => path.join(__dirname, dir)
 // // const URL = 'http://m.visitshanghai.com.cn'
 // const URL = 'http://172.25.33.219:9090'
-const BundleAnalyzerPlugin = require(
-	'webpack-bundle-analyzer').BundleAnalyzerPlugin
-const { InjectManifest } = require('workbox-webpack-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
+// const BundleAnalyzerPlugin = require(
+// 	'webpack-bundle-analyzer').BundleAnalyzerPlugin
+// const { InjectManifest } = require('workbox-webpack-plugin')
+// const TerserPlugin = require('terser-webpack-plugin')
 module.exports = {
+	pages,
 	outputDir: process.env.outputDir || 'dist',
-	publicPath: './',
+	// publicPath: './',
 	// chainWebpack: config => {
 	// 	config.optimization.minimizer([new TerserPlugin({
 	// 		terserOptions: {
@@ -32,22 +34,22 @@ module.exports = {
 	// },
 	productionSourceMap: false,
 	devServer: {
-		proxy: {
-			'/information': {
-				target: URL,
-				changeOrigin: true,
-				pathRewrite: {
-					'/information': '/information'
-				}
-			},
-			'/search': {
-				// target: 'http://172.25.33.219:9090',
-				target: URL,
-				changeOrigin: true,
-				pathRewrite: {
-					'/search': '/search'
-				}
-			}
-		}
+		// proxy: {
+		// 	'/information': {
+		// 		target: URL,
+		// 		changeOrigin: true,
+		// 		pathRewrite: {
+		// 			'/information': '/information'
+		// 		}
+		// 	},
+		// 	'/search': {
+		// 		// target: 'http://172.25.33.219:9090',
+		// 		target: URL,
+		// 		changeOrigin: true,
+		// 		pathRewrite: {
+		// 			'/search': '/search'
+		// 		}
+		// 	}
+		// }
 	}
 }
