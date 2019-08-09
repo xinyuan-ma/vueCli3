@@ -1,3 +1,7 @@
+/**
+*
+* 音频联系， 音频api ： https://www.w3school.com.cn/tags/html_ref_audio_video_dom.asp
+*/
 <template>
 	<div class="audio-box" @touchmove.prevent>
 		<!--<audio ref="audio" controls>-->
