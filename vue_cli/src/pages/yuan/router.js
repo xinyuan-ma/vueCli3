@@ -6,6 +6,8 @@ const Directive = () => import(/* webpackChunkName: "directive" */ '@/views/dire
 const ScrollTest = () => import(/* webpackChunkName: "directive" */ '@/views/scrollTest.vue')
 const PhotoLiu = () => import(/* webpackChunkName: "directive" */ '@/views/photoLiu.vue')
 const OrderPhotoLiu = () => import(/* webpackChunkName: "directive" */ '@/views/orderPhotoLiu.vue')
+const AudioTest = () => import(/* webpackChunkName: "directive" */ '@/views/audioTest.vue')
+
 Vue.use(Router)
 
 export default new Router({
@@ -26,6 +28,11 @@ export default new Router({
       path: '/photoLiu',
       name: 'photoLiu',
       component: PhotoLiu
+    },
+    {
+      path: '/audioTest',
+      name: 'audioTest',
+      component: AudioTest
     },
     {
       path: '/orderPhotoLiu',
