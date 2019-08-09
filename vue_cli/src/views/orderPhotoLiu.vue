@@ -1,4 +1,4 @@
-/** 图片瀑布流（这个瀑布流是无序的，是按照图片加载的前后顺序加载的）
+/** 图片瀑布流（这个瀑布流是有序的，按照元素接口返回的顺序加载）
 * 主要用到img的load属性，这个属性是在图片加载成功后，执行的回到，可以获取图片的高度
 *
 *
@@ -223,7 +223,9 @@ export default {
           describe: 'Feel the power of smart technology',
           imgUrl: 'http://hhh.images.visitshanghai.com.cn/app/qianyan.jpg'
         }
-      ]
+      ],
+      queue: {}, // 等待加载的元素
+      appended: {} // 已经添加的元素
     }
   },
   created () {
@@ -235,18 +237,46 @@ export default {
   },
   methods: {
     imgLoaded (index, imgEl) {
-      imgEl.classList.add('loaded') // 给元素加上loaded的class类名
-      const left = this.$refs.left // 获取ref为left的元素，替代通过js获取元素
+      if (index === 0) {
+        this.append(index, imgEl)
+        this.checkQueue()
+      } else {
+        // 检查前一个元素是否已添加
+        if (this.appended[index - 1]) {
+          this.append(index, imgEl)
+          this.checkQueue()
+          // 前一个元素还未展示，则先等待
+        } else {
+          this.queue[index] = imgEl
+        }
+      }
+    },
+    append (index, imgEl) {
+      // 移出等待队列
+      delete this.queue[index]
+      this.appended[index] = imgEl
+      imgEl.classList.add('loaded')
+      const left = this.$refs.left
       const right = this.$refs.right
       const el = this.$refs['item' + index][0]
-      const elHeight = el.offsetHeight // 获得整个div元素的高度，包括图片和描述
-        if (this.leftHeight > this.rightHeight) { // 判断插入左边还是右边 原则：哪边高，元素就插到短的那边
-          this.rightHeight += elHeight
-          right.appendChild(el) // 添加元素
-        } else {
-          this.leftHeight += elHeight
-          left.appendChild(el)
+      const elHeight = el.offsetHeight
+      if (this.leftHeight > this.rightHeight) {
+        this.rightHeight += elHeight
+        right.appendChild(el)
+      } else {
+        this.leftHeight += elHeight
+        left.appendChild(el)
+      }
+    },
+    // 检查是否有元素在队列中等待
+    checkQueue () {
+      const keys = Object.keys(this.queue)
+      keys.sort((prev, next) => prev - next)
+      keys.forEach(index => {
+        if (this.appended[index - 1]) {
+          this.append(index, this.queue[index])
         }
+      })
     }
   }
 }

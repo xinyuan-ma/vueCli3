@@ -5,6 +5,7 @@ import Router from 'vue-router'
 const Directive = () => import(/* webpackChunkName: "directive" */ '@/views/directive_demo.vue')
 const ScrollTest = () => import(/* webpackChunkName: "directive" */ '@/views/scrollTest.vue')
 const PhotoLiu = () => import(/* webpackChunkName: "directive" */ '@/views/photoLiu.vue')
+const OrderPhotoLiu = () => import(/* webpackChunkName: "directive" */ '@/views/orderPhotoLiu.vue')
 Vue.use(Router)
 
 export default new Router({
@@ -25,6 +26,11 @@ export default new Router({
       path: '/photoLiu',
       name: 'photoLiu',
       component: PhotoLiu
+    },
+    {
+      path: '/orderPhotoLiu',
+      name: 'orderPhotoLiu',
+      component: OrderPhotoLiu
     },
     {
       path: '/about',
