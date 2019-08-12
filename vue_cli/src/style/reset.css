@@ -20,7 +20,7 @@ mark{background-color:transparent;}
 a,ins,s,u,del{text-decoration:none;}
 a{color:#333333;}
 sup,sub{vertical-align:baseline;}
-body{font-size:32px;height:100%;font-family:-apple-system,"Helvetica Neue",Helvetica,Arial,sans-serif;overflow:hidden;}
+body{font-size: .42667rem !important;height:100%;font-family:-apple-system,"Helvetica Neue",Helvetica,Arial,sans-serif;overflow:hidden;}
 body{-webkit-text-size-adjust:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-overflow-scrolling:touch;}
 hr{height:.02rem;margin:.1rem 0;border:mediumnone;border-top:.02rem solid #cacaca;}
 .amap-logo {

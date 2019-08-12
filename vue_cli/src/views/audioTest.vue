@@ -1,5 +1,4 @@
 /**
-*
 * 音频联系， 音频api ： https://www.w3school.com.cn/tags/html_ref_audio_video_dom.asp
 */
 <template>
@@ -67,18 +66,15 @@ export default {
 	mounted () {
 		let audio = this.$refs.audio
 		console.log(audio, '123456')
-		// audio.load()
+		audio.load() // 重新加载音频/视频元素
 		let _this = this
-		audio.addEventListener('canplay', function () {
-			console.log(audio.duration, 'audio.duration')
+		audio.addEventListener('canplay', function () { // 当浏览器可以播放音频时，音频加载分为多个步骤，最开始先加载音频元信息，包括音频时长等，加载完成后，才会执行canplay
 			_this.totalTime = _this.transTime(audio.duration)
 		})
-		// 监听音频播放时间并更新进度条
-		audio.addEventListener('timeupdate', function (event) {
+		audio.addEventListener('timeupdate', function (event) { // 音频播放中触发，监听音频播放时间并更新进度条
 			_this.updateProgress(audio)
 		}, false)
-		// 监听播放完成事件
-		audio.addEventListener('ended', function () {
+		audio.addEventListener('ended', function () { // 监听播放完成事件
 			_this.audioEnded()
 			if (_this.cycle) {
 				audio.currentTime = 0
@@ -86,8 +82,7 @@ export default {
 				audio.play()
 			}
 		}, false)
-		// 监听metaloaddata
-		audio.addEventListener('onloadedmetadata', function () {
+		audio.addEventListener('onloadedmetadata', function () { // 音频的元信息获取成功后触发，监听metaloaddata， 音频的加载顺序链接：https://www.w3school.com.cn/tags/av_event_loadedmetadata.asp
 			_this.totalTime = audio.duration
 		}, false)
 		this.dragProgressDotEvent(audio)
@@ -191,10 +186,10 @@ export default {
 			}
 			var flag = false // 标记是否拖动开始
 
-			// 触摸开始时
+			// 触摸开始时，会记录一个刚开始触发的位置
 			dot.addEventListener('touchstart', down, false)
 
-			// 开始拖动
+			// 开始拖动，拖动过程中，鼠标的位置会不断变化，通过鼠标终点的位置 - 开始的位置，就是鼠标移动的位置
 			document.addEventListener('touchmove', move, false)
 
 			// 拖动结束

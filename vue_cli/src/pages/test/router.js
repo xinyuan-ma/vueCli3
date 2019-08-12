@@ -4,6 +4,7 @@ import Router from 'vue-router'
 // import Title from 'components/title/title.vue'
 const Title = r => require.ensure([], () => r(require('@/components/title/title.vue')), 'title')
 const Home = r => require.ensure([], () => r(require('@/views/Home.vue')), 'home')
+const People = r => require.ensure([], () => r(require('@/views/people.vue')), 'people')
 const MobileScroll = r => require.ensure([], () => r(require('@/views/mobileScroll/mobileScroll.vue')), 'mobileScroll')
 Vue.use(Router)
 
@@ -20,6 +21,11 @@ export default new Router({
       path: '/title',
       name: 'title',
       component: Title
+    },
+    {
+      path: '/people',
+      name: 'people',
+      component: People
     },
     {
       path: '/mobileScroll',
