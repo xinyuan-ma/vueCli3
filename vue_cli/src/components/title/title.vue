@@ -6,12 +6,12 @@
 
 <script>
 export default {
-  name: 'title',
-  data () {
-    return {
-      msg: '这是title页面'
-    }
-  }
+	name: 'title',
+	data () {
+		return {
+			msg: '这是title页面'
+		}
+	}
 }
 </script>
 

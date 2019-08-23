@@ -13,7 +13,12 @@ module.exports = {
     'indent': ["off", "tab"],
     'no-trailing-spaces': 0,
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    "indent": ["error", "tab"],
+    "no-tabs": "off",
+    "no-multi-spaces": "off",
+    "no-extra-boolean-cast": "off",
+    "no-multiple-empty-lines": "off"
   },
   parserOptions: {
     parser: 'babel-eslint'

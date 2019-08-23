@@ -7,45 +7,51 @@ const ScrollTest = () => import(/* webpackChunkName: "directive" */ '@/views/scr
 const PhotoLiu = () => import(/* webpackChunkName: "directive" */ '@/views/photoLiu.vue')
 const OrderPhotoLiu = () => import(/* webpackChunkName: "directive" */ '@/views/orderPhotoLiu.vue')
 const AudioTest = () => import(/* webpackChunkName: "directive" */ '@/views/audioTest.vue')
+const MapHot = () => import(/* webpackChunkName: "directive" */ '@/views/map-hot/index.vue')
 
 Vue.use(Router)
 
 export default new Router({
-  // mode: 'history', // http://localhost:8081/yuan/#/
-  // base: process.env.BASE_URL,
-  routes: [
-    {
-      path: '/',
-      name: 'scrollTest',
-      component: ScrollTest
-    },
-    {
-      path: '/directive',
-      name: 'directive',
-      component: Directive
-    },
-    {
-      path: '/photoLiu',
-      name: 'photoLiu',
-      component: PhotoLiu
-    },
-    {
-      path: '/audioTest',
-      name: 'audioTest',
-      component: AudioTest
-    },
-    {
-      path: '/orderPhotoLiu',
-      name: 'orderPhotoLiu',
-      component: OrderPhotoLiu
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ '@/views/About.vue')
-    }
-  ]
+// mode: 'history', // http://localhost:8081/yuan/#/
+// base: process.env.BASE_URL,
+	routes: [
+		{
+			path: '/',
+			name: 'scrollTest',
+			component: ScrollTest
+		},
+		{
+			path: '/directive',
+			name: 'directive',
+			component: Directive
+		},
+		{
+			path: '/mapHot',
+			name: 'mapHot',
+			component: MapHot
+		},
+		{
+			path: '/photoLiu',
+			name: 'photoLiu',
+			component: PhotoLiu
+		},
+		{
+			path: '/audioTest',
+			name: 'audioTest',
+			component: AudioTest
+		},
+		{
+			path: '/orderPhotoLiu',
+			name: 'orderPhotoLiu',
+			component: OrderPhotoLiu
+		},
+		{
+			path: '/about',
+			name: 'about',
+			// route level code-splitting
+			// this generates a separate chunk (about.[hash].js) for this route
+			// which is lazy-loaded when the route is visited.
+			component: () => import(/* webpackChunkName: "about" */ '@/views/About.vue')
+		}
+	]
 })
