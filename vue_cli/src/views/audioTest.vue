@@ -2,38 +2,43 @@
 * 音频联系， 音频api ： https://www.w3school.com.cn/tags/html_ref_audio_video_dom.asp
 */
 <template>
-	<div class="audio-box" @touchmove.prevent>
-		<!--<audio ref="audio" controls>-->
-		<audio ref="audio" :src="audioUrl">
-			<source :loop="cycle" type="audio/mp3">
-		</audio>
-		<div class="item-title">音频名字</div>
-		<div class="progress-box">
-			<div class="progressBar" ref="progressBar" @touchstart="justifyProgress">
-				<div class="progress" :style="{'width': progressBarWidth}"></div>
-				<div class="progressDot" id="progressDot" :style="{'left': progressDotLeft}"></div>
-			</div>
-			<div class="audio-time">
-				<span class="audio-current">{{currentTime}}</span>
-				<span class="audio-total">{{totalTime}}</span>
-			</div>
+	<div>
+		<div class="centerDiv">
+			<div class="cent">垂直居中</div>
 		</div>
+		<div class="audio-box" @touchmove.prevent>
+			<!--<audio ref="audio" controls>-->
+			<audio ref="audio" :src="audioUrl">
+				<source :loop="cycle" type="audio/mp3">
+			</audio>
+			<div class="item-title">音频名字</div>
+			<div class="progress-box">
+				<div class="progressBar" ref="progressBar" @touchstart="justifyProgress">
+					<div class="progress" :style="{'width': progressBarWidth}"></div>
+					<div class="progressDot" id="progressDot" :style="{'left': progressDotLeft}"></div>
+				</div>
+				<div class="audio-time">
+					<span class="audio-current">{{currentTime}}</span>
+					<span class="audio-total">{{totalTime}}</span>
+				</div>
+			</div>
 
-		<div class="control-box">
-			<div class="cycle" @click="setCycle">
-				<i class="iconfont" :class="{'iconxunhuanx': cycle, 'iconxunhuanstop':!cycle}"></i>
-			</div>
-			<div class="left-speed" @click="prevAudio">
-				<i class="iconfont iconhoutuix"></i>
-			</div>
-			<div class="play" id="audioPlayer" @click="playPlayer">
-				<i class="iconfont" :class="{'iconplay': paused, 'iconstop': !paused}"></i>
-			</div>
-			<div class="right-speed" @click="nextAudio">
-				<i class="iconfont iconqianjinx"></i>
-			</div>
-			<div class="volume" @click="setMuted">
-				<i class="iconfont" :class="{'iconno_volcex': muted, 'iconvolcex': !muted}"></i>
+			<div class="control-box">
+				<div class="cycle" @click="setCycle">
+					<i class="iconfont" :class="{'iconxunhuanx': cycle, 'iconxunhuanstop':!cycle}"></i>
+				</div>
+				<div class="left-speed" @click="prevAudio">
+					<i class="iconfont iconhoutuix"></i>
+				</div>
+				<div class="play" id="audioPlayer" @click="playPlayer">
+					<i class="iconfont" :class="{'iconplay': paused, 'iconstop': !paused}"></i>
+				</div>
+				<div class="right-speed" @click="nextAudio">
+					<i class="iconfont iconqianjinx"></i>
+				</div>
+				<div class="volume" @click="setMuted">
+					<i class="iconfont" :class="{'iconno_volcex': muted, 'iconvolcex': !muted}"></i>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -245,7 +250,22 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+	.centerDiv {
+		width: 100vw;
+		height: 500px;
+		position: relative;
+		.cent {
+			width: 800px;
+			height: 100px;
+			line-height: 100px;
+			position: absolute;
+			border: 1px solid red;
+			left: 50%;
+			top: 50%;
+		    transform: translate(-50%,-50%);
+			/*transform: translateX(-50%) translateY(-50%);*/
+		}
+	}
 	.audio-box {
 		height: 220px;
 		width: 100%;
