@@ -7,6 +7,7 @@ const ScrollTest = () => import(/* webpackChunkName: "directive" */ '@/views/scr
 const PhotoLiu = () => import(/* webpackChunkName: "directive" */ '@/views/photoLiu.vue')
 const OrderPhotoLiu = () => import(/* webpackChunkName: "directive" */ '@/views/orderPhotoLiu.vue')
 const AudioTest = () => import(/* webpackChunkName: "directive" */ '@/views/audioTest.vue')
+const VideoDemo = () => import(/* webpackChunkName: "directive" */ '@/views/videoDemo')
 const MapHot = () => import(/* webpackChunkName: "directive" */ '@/views/map-hot/index.vue')
 
 Vue.use(Router)
@@ -39,6 +40,11 @@ export default new Router({
 			path: '/audioTest',
 			name: 'audioTest',
 			component: AudioTest
+		},
+		{
+			path: '/videoDemo',
+			name: 'videoDemo',
+			component: VideoDemo
 		},
 		{
 			path: '/orderPhotoLiu',

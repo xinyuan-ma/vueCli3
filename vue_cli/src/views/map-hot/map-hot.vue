@@ -1,7 +1,6 @@
 <template>
 	<div class="comp__hot-spot--wrapper" :id="id">
-		<p>上海老字号</p>
-		<img class="comp__hot-spot--cover" :src="cover" :usemap="'#map-'+id">
+		<img class="comp__hot-spot--cover" :src="cover" :usemap="'#map-'+id" @load='imgLoaded'>
 		<map
 			v-if="map && map.length > 0"
 			:name="'map-'+id"
@@ -22,7 +21,6 @@
                 }"
 			>
 		</map>
-
 		<slot></slot>
 	</div>
 </template>
@@ -102,7 +100,9 @@ export default {
 		onResize () {
 			this.ratio = document.documentElement.clientWidth / this.viewWidth
 		},
-
+		imgLoaded () {
+			this.$emit('imgLoaded')
+		},
 		onClick (index) {
 			this.$emit('detail', { item: this.map[index], index })
 		}
