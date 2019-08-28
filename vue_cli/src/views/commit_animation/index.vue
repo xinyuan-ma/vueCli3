@@ -145,6 +145,9 @@ export default {
 							.transparent {
 								color: transparent;
 							}
+							.active {
+								color: #EF3535;
+							}
 						}
 					}
 				}
