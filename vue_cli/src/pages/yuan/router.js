@@ -8,6 +8,7 @@ const PhotoLiu = () => import(/* webpackChunkName: "directive" */ '@/views/photo
 const OrderPhotoLiu = () => import(/* webpackChunkName: "directive" */ '@/views/orderPhotoLiu.vue')
 const AudioTest = () => import(/* webpackChunkName: "directive" */ '@/views/audioTest.vue')
 const VideoDemo = () => import(/* webpackChunkName: "directive" */ '@/views/videoDemo')
+const Commit = () => import(/* webpackChunkName: "directive" */ '@/views/commit_animation')
 const MapHot = () => import(/* webpackChunkName: "directive" */ '@/views/map-hot/index.vue')
 
 Vue.use(Router)
@@ -45,6 +46,11 @@ export default new Router({
 			path: '/videoDemo',
 			name: 'videoDemo',
 			component: VideoDemo
+		},
+		{
+			path: '/commit_animation',
+			name: 'commit_animation',
+			component: Commit
 		},
 		{
 			path: '/orderPhotoLiu',
