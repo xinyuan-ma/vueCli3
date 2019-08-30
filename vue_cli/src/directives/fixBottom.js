@@ -29,7 +29,7 @@ function hiddenPrevent (evt) {
 }
 
 export default {
-	inserted (_el, binding) {
+	inserted (_el, binding) {  // 插入元素
 		let iOS = navigator.userAgent.indexOf('iPhone')
 		if (iOS !== -1) {
 			el = _el
@@ -38,7 +38,7 @@ export default {
 			document.body.addEventListener('touchmove', hiddenPrevent, false)
 		}
 	},
-	unbind (_el) {
+	unbind (_el) { // 解绑元素
 		let iOS = navigator.userAgent.indexOf('iPhone')
 		if (iOS !== -1) {
 			el = _el

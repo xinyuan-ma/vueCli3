@@ -6,6 +6,7 @@ const Directive = () => import(/* webpackChunkName: "directive" */ '@/views/dire
 const ScrollTest = () => import(/* webpackChunkName: "directive" */ '@/views/scrollTest.vue')
 const PhotoLiu = () => import(/* webpackChunkName: "directive" */ '@/views/photoLiu.vue')
 const OrderPhotoLiu = () => import(/* webpackChunkName: "directive" */ '@/views/orderPhotoLiu.vue')
+const SpritePhoto = () => import(/* webpackChunkName: "directive" */ '@/views/spritePhoto')
 const AudioTest = () => import(/* webpackChunkName: "directive" */ '@/views/audioTest.vue')
 const VideoDemo = () => import(/* webpackChunkName: "directive" */ '@/views/videoDemo')
 const Commit = () => import(/* webpackChunkName: "directive" */ '@/views/commit_animation')
@@ -56,6 +57,11 @@ export default new Router({
 			path: '/orderPhotoLiu',
 			name: 'orderPhotoLiu',
 			component: OrderPhotoLiu
+		},
+		{
+			path: '/sprite',
+			name: 'spritePhoto',
+			component: SpritePhoto
 		},
 		{
 			path: '/about',
