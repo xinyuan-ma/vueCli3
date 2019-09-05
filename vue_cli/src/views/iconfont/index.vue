@@ -1,6 +1,6 @@
 /** iconfont使用说明,要引入iconfont的css文件，现在在main.css中引入，如果不适用矢量图，只引入这个css文件即可，直接修改color就可以改变图标的颜色
 * 使用矢量图，需要在引入iconfont的js文件,现在在yuan.html中引入,注意： 矢量图不能改变颜色，矢量图的icon前面要加一个#，不能少
-*
+* iconfont用在单色图标，矢量图用在彩色图标，这是重要区别点
 */
 <template>
 	<div class="special_promo">
