@@ -11,6 +11,7 @@ const AudioTest = () => import(/* webpackChunkName: "directive" */ '@/views/audi
 const VideoDemo = () => import(/* webpackChunkName: "directive" */ '@/views/videoDemo')
 const Commit = () => import(/* webpackChunkName: "directive" */ '@/views/commit_animation')
 const MapHot = () => import(/* webpackChunkName: "directive" */ '@/views/map-hot/index.vue')
+const Iconfont = () => import(/* webpackChunkName: "directive" */ '@/views/iconfont/index.vue')
 
 Vue.use(Router)
 
@@ -32,6 +33,11 @@ export default new Router({
 			path: '/mapHot',
 			name: 'mapHot',
 			component: MapHot
+		},
+		{
+			path: '/iconfont',
+			name: 'iconfont',
+			component: Iconfont
 		},
 		{
 			path: '/photoLiu',
