@@ -12,6 +12,7 @@ const VideoDemo = () => import(/* webpackChunkName: "directive" */ '@/views/vide
 const Commit = () => import(/* webpackChunkName: "directive" */ '@/views/commit_animation')
 const MapHot = () => import(/* webpackChunkName: "directive" */ '@/views/map-hot/index.vue')
 const Iconfont = () => import(/* webpackChunkName: "directive" */ '@/views/iconfont/index.vue')
+const ScaleX = () => import(/* webpackChunkName: "directive" */ '@/views/scaleX/index.vue')
 
 Vue.use(Router)
 
@@ -38,6 +39,11 @@ export default new Router({
 			path: '/iconfont',
 			name: 'iconfont',
 			component: Iconfont
+		},
+		{
+			path: '/scaleX',
+			name: 'scaleX',
+			component: ScaleX
 		},
 		{
 			path: '/photoLiu',
