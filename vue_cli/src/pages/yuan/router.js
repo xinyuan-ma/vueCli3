@@ -13,6 +13,7 @@ const Commit = () => import(/* webpackChunkName: "directive" */ '@/views/commit_
 const MapHot = () => import(/* webpackChunkName: "directive" */ '@/views/map-hot/index.vue')
 const Iconfont = () => import(/* webpackChunkName: "directive" */ '@/views/iconfont/index.vue')
 const ScaleX = () => import(/* webpackChunkName: "directive" */ '@/views/scaleX/index.vue')
+const OnePx = () => import(/* webpackChunkName: "directive" */ '@/views/1px/index.vue')
 
 Vue.use(Router)
 
@@ -44,6 +45,11 @@ export default new Router({
 			path: '/scaleX',
 			name: 'scaleX',
 			component: ScaleX
+		},
+		{
+			path: '/onePx',
+			name: 'onePx',
+			component: OnePx
 		},
 		{
 			path: '/photoLiu',

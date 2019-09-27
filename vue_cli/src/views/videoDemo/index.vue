@@ -1,45 +1,21 @@
 <template>
 	<div class="special_promo">
-		<div class="box">
-			<div class="box-wraper">
-				<div class="block" id="block">
-					<div class="container">
-						<map-hot
-							:cover="promoImg"
-							:map="spots"
-							@detail="goNext"
-							@imgLoaded="imgLoaded"
-						></map-hot>
-						/**
-						* video 标签的教程 https://www.w3school.com.cn/tags/tag_video.asp
-						* 标签中去掉 controls="controls" ，就会去掉浏览器默认控件，比如播放按钮，播放进度
-						* webkit-playsinline='true' playsinline='true' 解决ios下 视频自动全屏播放的问题
-						* poster 是该视频的预览图，一般用视频的第一针做预览，不加poster的话 安卓手机播放视频前会显示一个很大播放图标，poster='http://hhh.images.visitshanghai.com.cn/app/videoDemo.png'
-						*/
-						video标签的注意点
-						<div class="videoClass">
-							<video :src="topVideo" muted loop="loop" webkit-playsinline='true' playsinline='true' autoplay="autoplay" poster="string" v-show="isLoad">
-								<source type="video/mp4" />
-								<!--<source type="video/ogg">-->
-								您的浏览器不支持 video 标签
-							</video>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+		<datepicker :value="date"></datepicker>
 	</div>
 </template>
 
 <script>
-import mapHot from '../map-hot/map-hot'
+import Datepicker from 'vuejs-datepicker'
+// import mapHot from '../map-hot/map-hot'
 export default {
 	name: 'specialPromo',
 	components: {
-		mapHot
+		// mapHot,
+		Datepicker
 	},
 	data () {
 		return {
+			date: new Date(2016, 9,  16),
 			isLoad: false,
 			showTitleHeight: 200,
 			index: 1,
