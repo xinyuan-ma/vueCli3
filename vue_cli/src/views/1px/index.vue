@@ -6,6 +6,15 @@
 		<br>
 		<div class="type_2">方法2，封装的方法,可以灵活实现4个边框的1px（推荐使用这一种）</div>
 		<br>
+		<div class="gif">
+			<p>使用动态图片做背景</p>
+			<p>使用动态图片做背景</p>
+			<p>使用动态图片做背景</p>
+			<p>使用动态图片做背景</p>
+			<p>使用动态图片做背景</p>
+			<p>使用动态图片做背景</p>
+			<p>使用动态图片做背景</p>
+		</div>
 	</div>
 </template>
 
@@ -48,5 +57,13 @@ export default {
 	.type_2 {
 		font-size: 12px;
 		.border-1px(1px, red, bottom);
+	}
+	.gif {
+		width: 100%;
+		height: 0;
+		background-image: url("../../static/image/timg.gif");
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+		padding-bottom: 84%;
 	}
 </style>
