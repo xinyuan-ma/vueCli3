@@ -1,6 +1,7 @@
 /** 教程: https://www.cnblogs.com/guangixn/p/10682131.html
 *  使用雪碧图注意点：引入插件npm install webpack-spritesmith --save
 *  配置注意点：SpritesmithPlugin中的 target 目标路径不要和图片路径放到一起，否则会雪碧图会一直循环生成
+*  图片注意点： 如果图片要显示同样的大小，注意生成雪碧图的图片 大小要一致，
 *  span元素的类名要和sprite.css 中的类名一致，注意给span元素一个宽高，因为雪碧图就是利用背景图生成的
 */
 <template>
