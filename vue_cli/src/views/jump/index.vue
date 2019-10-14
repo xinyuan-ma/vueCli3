@@ -1,19 +1,23 @@
 <template>
 	<div class="transition_demo" ref="getScroll" @scroll="getScroll">
-		<button @click="show = !show">阿牛</button>
-		<transition name="bounce">
-			<p v-if="bounce">我是一个p标签</p>
-		</transition>
-		<div class="jump" @click="jumpTo">跳转</div>
-		<!--当有相同标签名的元素切换时，需要通过 key 特性设置唯一的值来标记以让 Vue 区分它们-->
-		<transition name="fade" mode="out-in">
-			<p v-if="show" key="first">我是第一个p标签</p>
-			<p v-else key="second">我是第二个p标签</p>
-		</transition>
+		<!--<div class="jump_div">-->
+		<div class="jump" ref="jump" @scroll="getScrollX">
+			<div class="button" :class="{active: index === key}" v-for="(item, key) in 10" :key="key" @click="jumpTo(key)">第{{item}}button</div>
+		</div>
+		<!--</div>-->
+		<!--<button @click="show = !show">阿牛</button>-->
+		<!--<transition name="bounce">-->
+			<!--<p v-if="bounce">我是一个p标签</p>-->
+		<!--</transition>-->
+		<!--&lt;!&ndash;当有相同标签名的元素切换时，需要通过 key 特性设置唯一的值来标记以让 Vue 区分它们&ndash;&gt;-->
+		<!--<transition name="fade" mode="out-in">-->
+			<!--<p v-if="show" key="first">我是第一个p标签</p>-->
+			<!--<p v-else key="second">我是第二个p标签</p>-->
+		<!--</transition>-->
 
 		<!--使用animate.css动画-->
 		<!--<transition enter-active-class="animated rotateInDownLeft" leave-active-class="animated rotateOutUpLeft">-->
-			<!--<p class="animated" v-if="show">hello</p>-->
+		<!--<p class="animated" v-if="show">hello</p>-->
 		<!--</transition>-->
 		<transition
 			appear
@@ -39,34 +43,51 @@ export default {
 			bounce: false,
 			content: 'toast弹框',
 			getBoundingClientRect: [],
-			key: 0
+			buttons: [],
+			key: 0,
+			index: 0,
+			halfClientWidth: ''
 		}
 	},
 	mounted () {
+		// this.$refs.jump.scrollLeft = 100
 		let doms = document.querySelectorAll('.scroll_div')
 		this.getBoundingClientRect = Array.from(doms).map(dom => {
 			console.log(dom.offsetTop)
 			return (dom.getBoundingClientRect().top)
 		})
-		console.log(this.getBoundingClientRect, 'this.getBoundingClientRect')
+		let buttonDoms = document.querySelectorAll('.button')
+		this.buttons = Array.from(buttonDoms).map(dom => {
+			console.log(dom.offsetTop)
+			return (dom.offsetLeft)
+		})
+		this.halfClientWidth = this.$refs.getScroll.clientWidth / 2
+		console.log(this.buttons, 'this.buttons')
 	},
 	methods: {
-		jumpTo () {
-			this.key += 1
-			console.log(this.key)
-			if (this.key > 3) {
-				this.key = 0
-			}
-			console.log(this.getBoundingClientRect[this.key] - 10, 'this.getBoundingClientRect[this.key] - 10')
-			this.$refs.getScroll.scrollTop = this.getBoundingClientRect[this.key] - 10
+		jumpTo (key) {
+			this.index = key
+			// console.log(this.getBoundingClientRect[this.key] - 10, 'this.getBoundingClientRect[this.key] - 10')
+			this.$refs.getScroll.scrollTop = this.getBoundingClientRect[key] - 30
 		},
 		getScroll () {
-			let doms = document.querySelectorAll('.scroll_div')
-			let getBoundingClientRect = Array.from(doms).map(dom => {
-				console.log(dom.offsetTop)
-				return (dom.getBoundingClientRect().top)
-			})
-			console.log(getBoundingClientRect, this.getBoundingClientRect)
+			let scrollTop = this.$refs.getScroll.scrollTop
+			console.log(scrollTop, 111)
+			for (let i = this.getBoundingClientRect.length - 1; i >= 0; i--) {
+				if (scrollTop > this.getBoundingClientRect[i]) {
+					this.index = i
+					console.log(this.index)
+					if (this.buttons[i] > this.halfClientWidth) {
+						this.$refs.jump.scrollLeft = this.buttons[i] - this.halfClientWidth
+					} else {
+						this.$refs.jump.scrollLeft = 0
+					}
+					break
+				}
+			}
+		},
+		getScrollX () {
+			console.log(222)
 		}
 	}
 }
@@ -74,11 +95,25 @@ export default {
 <style lang="less">
 	.jump {
 		width: 100%;
+		/*width: auto;*/
+		white-space: nowrap;
+		overflow-x: scroll;
 		height: 50px;
+		line-height: 50px;
 		position: fixed;
 		top: 0;
 		z-index: 100;
 		background-color: rgba(100, 100, 100, .5);
+		.button {
+			display: inline-block;
+			padding: 0 10px;
+			margin-right: 10px;
+			background-color: #eaeaea;
+			border-radius: 12px;
+			&.active {
+				color: darkred;
+			}
+		}
 	}
 	.fade-enter-active, .fade-leave-active {
 		transition: opacity .5s;
@@ -134,7 +169,7 @@ export default {
 		width: 100%;
 		height: 100%;
 		overflow-y: scroll;
-		padding-top: 50px;
+		padding-top: 60px;
 		.scroll_div {
 			width: 100%;
 			height: 50%;

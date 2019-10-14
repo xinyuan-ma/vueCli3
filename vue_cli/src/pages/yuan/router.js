@@ -15,6 +15,7 @@ const Iconfont = () => import(/* webpackChunkName: "directive" */ '@/views/iconf
 const ScaleX = () => import(/* webpackChunkName: "directive" */ '@/views/scaleX/index.vue')
 const OnePx = () => import(/* webpackChunkName: "directive" */ '@/views/1px/index.vue')
 const Transition = () => import(/* webpackChunkName: "directive" */ '@/views/transition_demo')
+const Jump = () => import(/* webpackChunkName: "directive" */ '@/views/jump')
 
 Vue.use(Router)
 
@@ -56,6 +57,11 @@ export default new Router({
 			path: '/transition',
 			name: 'transition',
 			component: Transition
+		},
+		{
+			path: '/jump',
+			name: 'jump',
+			component: Jump
 		},
 		{
 			path: '/photoLiu',
