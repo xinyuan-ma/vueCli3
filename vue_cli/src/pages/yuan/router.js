@@ -14,6 +14,7 @@ const MapHot = () => import(/* webpackChunkName: "directive" */ '@/views/map-hot
 const Iconfont = () => import(/* webpackChunkName: "directive" */ '@/views/iconfont/index.vue')
 const ScaleX = () => import(/* webpackChunkName: "directive" */ '@/views/scaleX/index.vue')
 const OnePx = () => import(/* webpackChunkName: "directive" */ '@/views/1px/index.vue')
+const Transition = () => import(/* webpackChunkName: "directive" */ '@/views/transition_demo')
 
 Vue.use(Router)
 
@@ -50,6 +51,11 @@ export default new Router({
 			path: '/onePx',
 			name: 'onePx',
 			component: OnePx
+		},
+		{
+			path: '/transition',
+			name: 'transition',
+			component: Transition
 		},
 		{
 			path: '/photoLiu',

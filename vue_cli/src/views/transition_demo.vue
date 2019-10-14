@@ -12,8 +12,16 @@
 		</transition>
 
 		<!--使用animate.css动画-->
-		<transition enter-active-class="animated rotateInDownLeft" leave-active-class="animated rotateOutUpLeft">
-			<p v-if="show">hello</p>
+		<!--<transition enter-active-class="animated rotateInDownLeft" leave-active-class="animated rotateOutUpLeft">-->
+			<!--<p class="animated" v-if="show">hello</p>-->
+		<!--</transition>-->
+		<transition
+			appear
+			enter-active-class="animated slideInUp"
+			leave-active-class="animated fadeOut">
+			<div v-if="show" class="toast-container" style="z-index: 999;">
+				<span>{{content}}</span>
+			</div>
 		</transition>
 
 	</div>
@@ -27,7 +35,8 @@ export default {
 	data: function () {
 		return {
 			show: false,
-			bounce: false
+			bounce: false,
+			content: 'toast弹框'
 		}
 	}
 }
@@ -36,7 +45,6 @@ export default {
 	.fade-enter-active, .fade-leave-active {
 		transition: opacity .5s;
 	}
-
 	.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
 		opacity: 0;
 	}
@@ -62,6 +70,26 @@ export default {
 		}
 		100% {
 			transform: scale(1);
+		}
+	}
+	.toast-container {
+		display: flex;
+		z-index: 100;
+		justify-content: center;
+		position: fixed;
+		bottom: 120px;
+		width: 100%;
+		font-size: 28px;
+		color: #fff;
+		animation-duration: 0.35s;
+		span {
+			display: block;
+			max-width: 700px;
+			padding: 30px 30px;
+			border-radius: 12px;
+			background: rgba(0, 0, 0, .6);
+			word-wrap: break-word; // 英文换行
+			white-space: pre-wrap; // 中文换行
 		}
 	}
 </style>
