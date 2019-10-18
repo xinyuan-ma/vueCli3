@@ -7,6 +7,7 @@ import 'animate.css'
 import '@/style/reset.css'
 import '@/style/main.css'
 import '@/style/flexible.less'
+import '@/views/vue_extend/index.js'
 // if (process.env.NODE_ENV !== 'production') {
 const Vconsole = require('vconsole')
 const vConsole = new Vconsole()

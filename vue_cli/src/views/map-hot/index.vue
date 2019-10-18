@@ -39,6 +39,10 @@ export default {
 		}
 	},
 	mounted () {
+		console.log(this, 'mapHot')
+		// this.$toast({
+		// 	content: '这是toast弹框'
+		// })
 	},
 	methods: {
 		goNext (val) {
