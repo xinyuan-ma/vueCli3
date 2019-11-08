@@ -13,7 +13,7 @@
 				</video>
 			</div>
 		</div>
-		<!--<datepicker :value="date"></datepicker>-->
+		<datepicker :value="date"></datepicker>
 	</div>
 </template>
 

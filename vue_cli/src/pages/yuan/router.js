@@ -16,6 +16,7 @@ const ScaleX = () => import(/* webpackChunkName: "directive" */ '@/views/scaleX/
 const OnePx = () => import(/* webpackChunkName: "directive" */ '@/views/1px/index.vue')
 const Transition = () => import(/* webpackChunkName: "directive" */ '@/views/transition_demo')
 const Jump = () => import(/* webpackChunkName: "directive" */ '@/views/jump')
+const DownloadExcel = () => import(/* webpackChunkName: "directive" */ '@/views/download_Excel')
 
 Vue.use(Router)
 
@@ -23,6 +24,11 @@ export default new Router({
 // mode: 'history', // http://localhost:8081/yuan/#/
 // base: process.env.BASE_URL,
 	routes: [
+		{
+			path: '/download_Excel',
+			name: 'download_Excel',
+			component: DownloadExcel
+		},
 		{
 			path: '/',
 			name: 'scrollTest',

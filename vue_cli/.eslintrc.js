@@ -18,7 +18,8 @@ module.exports = {
     "no-tabs": "off",
     "no-multi-spaces": "off",
     "no-extra-boolean-cast": "off",
-    "no-multiple-empty-lines": "off"
+    "no-multiple-empty-lines": "off",
+    "camelcase": ["error", {"allow": ["aa_bb"]}]
   },
   parserOptions: {
     parser: 'babel-eslint'

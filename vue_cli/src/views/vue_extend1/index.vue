@@ -14,7 +14,7 @@ export default {
 	},
 	methods: {
 		openShow () {
-			this.show = true
+			this.show = false
 		},
 		hidden () {
 			this.show = false

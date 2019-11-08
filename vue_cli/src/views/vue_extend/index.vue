@@ -8,7 +8,7 @@ export default {
 	name: 'toast',
 	data: function () {
 		return {
-			show: true
+			show: false
 		}
 	},
 	methods: {

@@ -9,6 +9,13 @@ import '@/style/main.css'
 import '@/style/flexible.less'
 import '@/views/vue_extend/index.js'
 import '@/views/vue_extend1/toast.js'
+import {
+	Table,
+	TableColumn
+} from 'element-ui'
+
+Vue.use(Table)
+Vue.use(TableColumn)
 // if (process.env.NODE_ENV !== 'production') {
 const Vconsole = require('vconsole')
 const vConsole = new Vconsole()
