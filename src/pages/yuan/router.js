@@ -17,6 +17,7 @@ const OnePx = () => import(/* webpackChunkName: "directive" */ '@/views/1px/inde
 const Transition = () => import(/* webpackChunkName: "directive" */ '@/views/transition_demo')
 const Jump = () => import(/* webpackChunkName: "directive" */ '@/views/jump')
 const DownloadExcel = () => import(/* webpackChunkName: "directive" */ '@/views/download_Excel')
+const ChoujiangPrize = () => import(/* webpackChunkName: "directive" */ '@/views/choujiangPrize')
 
 Vue.use(Router)
 
@@ -24,6 +25,11 @@ export default new Router({
 // mode: 'history', // http://localhost:8081/yuan/#/
 // base: process.env.BASE_URL,
 	routes: [
+		{
+			path: '/choujiangPrize',
+			name: 'ChoujiangPrize',
+			component: ChoujiangPrize
+		},
 		{
 			path: '/download_Excel',
 			name: 'download_Excel',
