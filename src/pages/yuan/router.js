@@ -18,6 +18,7 @@ const Transition = () => import(/* webpackChunkName: "directive" */ '@/views/tra
 const Jump = () => import(/* webpackChunkName: "directive" */ '@/views/jump')
 const DownloadExcel = () => import(/* webpackChunkName: "directive" */ '@/views/download_Excel')
 const ChoujiangPrize = () => import(/* webpackChunkName: "directive" */ '@/views/choujiangPrize')
+const TestFilter = () => import(/* webpackChunkName: "directive" */ '@/views/filter')
 
 Vue.use(Router)
 
@@ -29,6 +30,11 @@ export default new Router({
 			path: '/choujiangPrize',
 			name: 'ChoujiangPrize',
 			component: ChoujiangPrize
+		},
+		{
+			path: '/filter',
+			name: 'filter',
+			component: TestFilter
 		},
 		{
 			path: '/download_Excel',
