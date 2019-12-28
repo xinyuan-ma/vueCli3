@@ -19,6 +19,7 @@ const Jump = () => import(/* webpackChunkName: "directive" */ '@/views/jump')
 const DownloadExcel = () => import(/* webpackChunkName: "directive" */ '@/views/download_Excel')
 const ChoujiangPrize = () => import(/* webpackChunkName: "directive" */ '@/views/choujiangPrize')
 const TestFilter = () => import(/* webpackChunkName: "directive" */ '@/views/filter')
+const Ttml2canvas = () => import(/* webpackChunkName: "directive" */ '@/views/html2canvas')
 
 Vue.use(Router)
 
@@ -26,6 +27,11 @@ export default new Router({
 // mode: 'history', // http://localhost:8081/yuan/#/
 // base: process.env.BASE_URL,
 	routes: [
+		{
+			path: '/html2canvas',
+			name: 'html2canvas',
+			component: Ttml2canvas
+		},
 		{
 			path: '/choujiangPrize',
 			name: 'ChoujiangPrize',

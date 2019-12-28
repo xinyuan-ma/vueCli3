@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 // import Mixin from './mixin'
+import "babel-polyfill"
+
 import 'animate.css'
 import '@/style/reset.css'
 import '@/style/main.css'

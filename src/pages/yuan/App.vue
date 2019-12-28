@@ -23,12 +23,12 @@ export default {
 		for (let i = 1; i <= 16; i++) {
 			blueBall.push(i.toString())
 		}
-		let s1 = '3 7 9 16 17 20 22 25 28 30 32'
-		let s2 = '1 5 10 15 16 18 19 20 21 26 30'
-		let s3 = '3 6 11 12 15 16 18 21 25 28 31'
-		let s5 = '3 11 15 16 18 31 5 10 15 16 18 30 1 6 11 18 21 30 2 6 10 21 30 31 1 4 13 18 21 28'
-		let s4 = `${s1} ${s2} ${s3} ${s5}`
-		let s = '15 16 10 12 1 4 5 6 8 10 11 12 13 16 10 12 6 16 13'
+		let s1 = '1 3 8 10 17 18 20 21 22 25 31'
+		let s2 = '4 6 7 10 18 21 22 23 25 28 29'
+		let s3 = '2 4 7 8 9 14 20 21 25 28 30 32'
+		// let s5 = '3 11 15 16 18 31 5 10 15 16 18 30 1 6 11 18 21 30 2 6 10 21 30 31 1 4 13 18 21 28'
+		let s4 = `${s1} ${s2} ${s3}`
+		let s = '1 16 4 10 6 10 11 12 14'
 		this.quchong(redBall, s4, saveRedBall)
 		this.quchong(blueBall, s, saveBlueBall)
 		console.log(saveRedBall, saveBlueBall, 'saveRed')
