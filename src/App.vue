@@ -13,6 +13,7 @@ import url from '@/config'
 
 export default {
 	mounted () {
+		// 项目地址 http://localhost:8080/yuan/#/
 		console.log(window.location, 'window.location')
 		console.log(process.env, 'process.env')
 		console.log(url, 'url')

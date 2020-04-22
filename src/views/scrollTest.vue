@@ -38,7 +38,7 @@ export default {
 		height: 100%;
 		overflow: auto;
 		p {
-			height: 200px;
+			height: 30px;
 		}
 	}
 </style>

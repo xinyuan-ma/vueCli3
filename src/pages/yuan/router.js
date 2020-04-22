@@ -3,6 +3,7 @@ import Router from 'vue-router'
 // import Home from '../views/Home.vue'
 // import Title from 'components/title/title.vue'
 const Directive = () => import(/* webpackChunkName: "directive" */ '@/views/directive_demo.vue')
+const Dropdown = () => import(/* webpackChunkName: "directive" */ '@/views/dropDown.vue')
 const ScrollTest = () => import(/* webpackChunkName: "directive" */ '@/views/scrollTest.vue')
 const PhotoLiu = () => import(/* webpackChunkName: "directive" */ '@/views/photoLiu.vue')
 const OrderPhotoLiu = () => import(/* webpackChunkName: "directive" */ '@/views/orderPhotoLiu.vue')
@@ -27,6 +28,11 @@ export default new Router({
 // mode: 'history', // http://localhost:8081/yuan/#/
 // base: process.env.BASE_URL,
 	routes: [
+		{
+			path: '/drop-down',
+			name: 'dropdown',
+			component: Dropdown
+		},
 		{
 			path: '/html2canvas',
 			name: 'html2canvas',
