@@ -23,12 +23,14 @@
 					<p>{{item.name || item.userName}}</p>
 				</li>
 			</ul>
+			<div class="phone" @click="phone({phoneNumber: 13837120071})">打电话</div>
 		</drop-down>
 	</div>
 </template>
 
 <script>
 import dropDown from '../components/dropDown/index'
+import phone from '../common/phone'
 
 export default {
 	name: 'dropDownTest',
@@ -52,6 +54,7 @@ export default {
 	},
 	mounted () {},
 	methods: {
+		phone: phone,
 		// 下拉开始
 		dropStart () {
 			if (this.dropIndex == this.dropTextList.length) {
@@ -89,5 +92,11 @@ export default {
 	.dropdownTest {
 		width: 100%;
 		padding-top: 55px;
+	}
+	.phone {
+		padding: 20px;
+		width: 400px;
+		margin: 0 auto;
+		background-color: rebeccapurple;
 	}
 </style>
