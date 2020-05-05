@@ -21,6 +21,7 @@ const DownloadExcel = () => import(/* webpackChunkName: "directive" */ '@/views/
 const ChoujiangPrize = () => import(/* webpackChunkName: "directive" */ '@/views/choujiangPrize')
 const TestFilter = () => import(/* webpackChunkName: "directive" */ '@/views/filter')
 const Ttml2canvas = () => import(/* webpackChunkName: "directive" */ '@/views/html2canvas')
+const TestJinjiangCalendar = () => import(/* webpackChunkName: "directive" */ '@/views/testJinjiangCalendar')
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
 // mode: 'history', // http://localhost:8081/yuan/#/
 // base: process.env.BASE_URL,
 	routes: [
+		{
+			path: '/test-jinjiang-calendar',
+			name: 'testJinjiangCalendar',
+			component: TestJinjiangCalendar
+		},
 		{
 			path: '/drop-down',
 			name: 'dropdown',
