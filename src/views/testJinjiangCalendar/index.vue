@@ -1,3 +1,4 @@
+/* eslint-disable */
 <template>
 	<div class="toast_container">
 		<div class="time-content">
@@ -14,7 +15,6 @@
 <script>
 import calender from '../../components/calendar/index.js'
 
-// console.log(calender({data: {}}), 'calender')
 export default {
 	name: 'toast',
 	data: function () {
@@ -25,8 +25,8 @@ export default {
 	},
 	filters: {
 		tiemFormat: time => {
-			let d = new Date(time);
-			return d.getFullYear() + '年' + (d.getMonth() + 1) + '月' + d.getDate() +'日'
+			let d = new Date(time)
+			return d.getFullYear() + '年' + (d.getMonth() + 1) + '月' + d.getDate() + '日'
 		}
 	},
 	methods: {
@@ -40,8 +40,8 @@ export default {
 				checkInDate: this.checkInDate,
 				checkOutDate: this.checkOutDate
 			}
-			calender({data, success})
-		},
+			calender({ data, success })
+		}
 	}
 }
 </script>
@@ -49,25 +49,22 @@ export default {
 	.toast_container {
 		width: 100%;
 		height: 100%;
-		position: fixed;
-		left: 0;
-		top: 0;
-		padding-top: 100px;
-		padding: 0 50px;
-		font-size: 32px;
-		z-index: 1;
+		overflow: hidden;
+		box-sizing: border-box;
 
 		.time-content {
+			box-sizing: border-box;
+			width: 100%;
+			line-height: 40px;
 			display: flex;
 			align-items: center;
-			justify-content: space-between;
-			line-height: 40px;
-			padding: 20px 0;
+			justify-content: space-around;
 			&:first-of-type {
 				margin-top: 100px;
 			}
+
 			.info {
-				padding: 10px;
+				padding: 12px;
 				background-color: #5bc0de;
 			}
 		}
