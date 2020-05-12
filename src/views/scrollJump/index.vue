@@ -80,7 +80,8 @@ export default {
 		return {
 			fiveBlocksFixed: false,	// 是否固定导航栏
 			activeBlockIndex: -1, // 默认的导航栏
-			fiveBlocksNavHeight: '',
+			fiveBlocksNavHeight: '', // 占位元素的高度
+			fiveBlockTop: '', // fiveBlock距离顶部的距离
 			fiveBlocks,
 			list
 		}
@@ -101,13 +102,21 @@ export default {
 	},
 	created () {},
 	mounted () {
-		let dom = document.querySelector('.scrollJump')
-		dom.addEventListener('scroll', this.handleScroll)
-		this.$nextTick(() => {
-			this.fiveBlocksNavHeight = this.$refs.fiveBlock.clientHeight
-		})
+		this.bandScroll()
+		this.fiveBlockBroundClientRect()
 	},
 	methods: {
+		// 元素绑定滚动事件
+		bandScroll () {
+			let dom = document.querySelector('.scrollJump')
+			dom.addEventListener('scroll', this.handleScroll)
+		},
+		// 获取元素距离顶部和自身的高度
+		fiveBlockBroundClientRect () {
+			let {top, height } = this.$refs.fiveBlock.getBoundingClientRect()
+			this.fiveBlockTop = top
+			this.fiveBlocksNavHeight = height
+		},
 		handleClickNav () {
 		},
 		handleScroll () {
