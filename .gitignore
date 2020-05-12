@@ -4,7 +4,7 @@ node_modules
 /uat
 /green
 /blue
-
+./idea
 # local env files
 .env.local
 .env.*.local
