@@ -17,6 +17,7 @@ const ScaleX = () => import(/* webpackChunkName: "directive" */ '@/views/scaleX/
 const OnePx = () => import(/* webpackChunkName: "directive" */ '@/views/1px/index.vue')
 const Transition = () => import(/* webpackChunkName: "directive" */ '@/views/transition_demo')
 const Jump = () => import(/* webpackChunkName: "directive" */ '@/views/jump')
+const ScrollJump = () => import(/* webpackChunkName: "scrollJump" */ '@/views/scrollJump')
 const DownloadExcel = () => import(/* webpackChunkName: "directive" */ '@/views/download_Excel')
 const ChoujiangPrize = () => import(/* webpackChunkName: "directive" */ '@/views/choujiangPrize')
 const TestFilter = () => import(/* webpackChunkName: "directive" */ '@/views/filter')
@@ -98,6 +99,11 @@ export default new Router({
 			path: '/jump',
 			name: 'jump',
 			component: Jump
+		},
+		{
+			path: '/scrollJump',
+			name: 'scrollJump',
+			component: ScrollJump
 		},
 		{
 			path: '/photoLiu',
