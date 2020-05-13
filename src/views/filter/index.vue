@@ -1,9 +1,10 @@
+/* eslint-disable */
 <template>
 	<div class="toast_container">
 		<div>
 			<p>{{content|filter1|filter2}}</p>
-			<p>{{time | timeFormat}}</p>
-			<p>{{params1 , params2 | filter3}}</p>
+			<p>{{time|timeFormat}}</p>
+			<p>{{params1,params2|filter3}}</p>
 		</div>
 	</div>
 </template>

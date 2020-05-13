@@ -1,16 +1,15 @@
 <template>
 	<div class="scrollJump" ref="scrollJump">
 		<header class="page-header">
-			<img
-				srcset="https://img-pub01.visitshanghai.com.cn/wuxinwenlv/header_750.jpg 750w, https://img-pub01.visitshanghai.com.cn/wuxinwenlv/header_1125.jpg 1125w, https://img-pub01.visitshanghai.com.cn/wuxinwenlv/header_1500.jpg 1500w"
+			<img srcset="https://img-pub01.visitshanghai.com.cn/wuxinwenlv/header_750.jpg 750w, https://img-pub01.visitshanghai.com.cn/wuxinwenlv/header_1125.jpg 1125w, https://img-pub01.visitshanghai.com.cn/wuxinwenlv/header_1500.jpg 1500w"
 				src="https://img-pub01.visitshanghai.com.cn/wuxinwenlv/header_750.jpg" @load="loadImg">
 		</header>
 		<!-- 五心 导航 -->
-		<div class="page-top" >
+		<div class="page-top">
 			<div class="group-nav" :class="{ fixed: fiveBlocksFixed }" ref="fiveBlock">
 				<ul ref="fiveBlockScroll">
 					<li v-for="(item, index) in fiveBlocks" :ref="item.navRef + index" :key="'block' + index"
-						:class="{ active: activeBlockIndex === index || !fiveBlocksFixed }"
+						:class="{ active: activeBlockIndex == index && fiveBlocksFixed}"
 						@click="handleClickNav(item, index)">{{item.title}}
 					</li>
 				</ul>
@@ -26,45 +25,44 @@
 				<div class="listImg">
 					<img v-for="(item, key) in list" :key="key" :src="item.img">
 				</div>
-        <p v-for="item in 10" style="height: 30px">测试站位使用</p>
+				<p v-for="item in 10" style="height: 30px">测试站位使用</p>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-  import smooth from './scroll'
-  console.log(smooth, 'smoothScroll');
-  let fiveBlocks = [
+import smooth from './scroll'
+let fiveBlocks = [
 	{
 		ref: 'nav1',
-    navRef: 'navRef',
+		navRef: 'navRef',
 		title: '导航1',
 		top: ''
 	}, {
 		ref: 'nav2',
-    navRef: 'navRef',
+		navRef: 'navRef',
 		title: '导航2',
 		top: ''
 	}, {
 		ref: 'nav3',
-    navRef: 'navRef',
+		navRef: 'navRef',
 		title: '导航3',
 		top: ''
 	}, {
 		ref: 'nav4',
-    navRef: 'navRef',
+		navRef: 'navRef',
 		title: '导航4',
 		top: ''
 	}, {
 		ref: 'nav5',
 		title: '导航5',
-    navRef: 'navRef',
+		navRef: 'navRef',
 		top: ''
 	}, {
 		ref: 'nav6',
 		title: '导航6',
-    navRef: 'navRef',
+		navRef: 'navRef',
 		top: ''
 	}
 ]
@@ -91,7 +89,8 @@ export default {
 			activeBlockIndex: -1, // 默认的导航栏
 			fiveBlocksNavHeight: '', // 占位元素的高度
 			fiveBlockTop: '', // fiveBlock距离顶部的距离
-      navMaxScroll: '', // 导航栏最大滚动距离
+			navMaxScroll: '', // 导航栏最大滚动距离
+			noScrolling: false, // 点击导航栏的时候，Y轴方向的滚动禁止再次触发导航栏的滚动，否则会出现导航栏的抖动
 			fiveBlocks,
 			list
 		}
@@ -113,12 +112,12 @@ export default {
 	created () {},
 	mounted () {
 		this.bandScroll()
-    this.fiveBlockBroundClientRect()
-    this.listScrollTop()
+		this.fiveBlockBroundClientRect()
+		this.listScrollTop()
 	},
 	methods: {
-	  // 等图片加载好以后，再计算导航栏的位置
-    loadImg () {},
+		// 等图片加载好以后，再计算导航栏的位置
+		loadImg () {},
 		// 元素绑定滚动事件
 		bandScroll () {
 			let dom = document.querySelector('.scrollJump')
@@ -126,64 +125,75 @@ export default {
 		},
 		// 获取导航栏距离顶部和自身的高度，已经导航栏最大滚动距离
 		fiveBlockBroundClientRect () {
-      let {top, width, height } = this.$refs.fiveBlock.getBoundingClientRect()
-      this.fiveBlockTop = top
+			let { top, width, height } = this.$refs.fiveBlock.getBoundingClientRect()
+			this.fiveBlockTop = top
 			this.fiveBlocksNavHeight = height
-      this.navMaxScroll = this.$refs.fiveBlockScroll.scrollWidth - width
-    },
-    // 获取锚链接各个区域的位置（距离顶部的距离）
-    listScrollTop () {
-      this.fiveBlocks.forEach(item => {
-        item.top = this.$refs[item.ref][0].getBoundingClientRect().top - 50 // 50是预留区域
-        console.log(item.top, 'item.top');
-      })
-    },
-    // 让导航栏滚动到屏幕中间
-    navScrollMiddle (index) {
-      let left = this.$refs['navRef' + index][0].offsetLeft + this.$refs['navRef' + index][0].clientWidth/2 // 计算该元素正中间距离最左边的距离
-      let middleLeft = window.innerWidth / 2 // 屏幕一半的距离
-      let scrollLeft = left - middleLeft
-      if (scrollLeft > 0) {
-        scrollLeft = Math.min(scrollLeft, this.navMaxScroll)
-      } else if (scrollLeft < 0) {
-        scrollLeft = 0
-      }
-      smooth.smoothScrollLeft(this.$refs.fiveBlockScroll, scrollLeft)
-    },
-    // 点击跳转到对应的锚点区域
+			this.navMaxScroll = this.$refs.fiveBlockScroll.scrollWidth - width
+		},
+		// 获取锚链接各个区域的位置（距离顶部的距离）
+		listScrollTop () {
+			this.fiveBlocks.forEach(item => {
+				item.top = this.$refs[item.ref][0].getBoundingClientRect().top - this.fiveBlocksNavHeight // fiveBlocksNavHeight是导航栏的高度
+				// console.log(item.top, 'item.top')
+			})
+		},
+		// 让导航栏滚动到屏幕中间
+		navScrollMiddle (index) {
+			let left = this.$refs['navRef' + index][0].offsetLeft + this.$refs['navRef' + index][0].clientWidth / 2 // 计算该元素正中间距离最左边的距离
+			let middleLeft = window.innerWidth / 2 // 屏幕一半的距离
+			let scrollLeft = left - middleLeft
+			if (scrollLeft > 0) {
+				scrollLeft = Math.min(scrollLeft, this.navMaxScroll)
+			} else if (scrollLeft < 0) {
+				scrollLeft = 0
+			}
+			smooth.smoothScrollLeft(this.$refs.fiveBlockScroll, scrollLeft)
+		},
+		// 点击跳转到对应的锚点区域
 		handleClickNav (item, index) {
-      let top = item.top // 目标位置
-      this.navScrollMiddle(index)
-      smooth.smoothScroll(top, this.$refs.scrollJump)
+			if (this.activeBlockIndex != index) {
+				this.activeBlockIndex = index
+				let top = item.top // 目标位置
+				this.navScrollMiddle(index)
+				this.noScrolling = true
+				// debugger
+				smooth.smoothScroll(top, this.$refs.scrollJump).then(() => {
+					setTimeout(() => {
+						this.noScrolling = false
+						console.log('滚动加载完')
+					}, 50) // 延迟50ms的作用是反正导航栏出现抖动
+				})
+			}
 		},
 		handleScroll () {
-		  let scrollTop = this.$refs.scrollJump.scrollTop
-      console.log(scrollTop, 'scrollTop');
-      if (scrollTop > this.fiveBlockTop) {
-        this.fiveBlocksFixed = true
-      } else {
-        this.fiveBlocksFixed = false
-      }
-      const modifyValue = 0
-      for (let i = this.fiveBlocks.length-1; i>0 ;i-- ) {
-        if (scrollTop > this.fiveBlocks[i].top - modifyValue) {
-          this.activeBlockIndex = i
-          break
-        }
-      }
-      if (this.activeBlockIndex > -1) {
-       this.navScrollMiddle(this.activeBlockIndex)
-      }
-      console.log(this.activeBlockIndex, 'this.activeBlockIndex');
-    }
+			let scrollTop = this.$refs.scrollJump.scrollTop
+			if (scrollTop > this.fiveBlockTop) {
+				this.fiveBlocksFixed = true
+			} else {
+				this.fiveBlocksFixed = false
+			}
+			if (!this.noScrolling) {
+				const modifyValue = 20
+				for (let i = this.fiveBlocks.length - 1; i >= 0; i--) {
+					if (scrollTop > this.fiveBlocks[i].top - modifyValue) {
+						this.activeBlockIndex = i
+						break
+					}
+				}
+				if (this.activeBlockIndex > -1) {
+					this.navScrollMiddle(this.activeBlockIndex)
+				}
+			}
+		}
 	}
 }
 </script>
 <style lang="less" scoped>
-  .page-header {
-    width: 100%;
-    height: 400px;
-  }
+	.page-header {
+		width: 100%;
+		height: 400px;
+	}
+
 	.scrollJump {
 		width: 100%;
 		height: 100%;
@@ -193,16 +203,18 @@ export default {
 	.page-top {
 		width: 100%;
 		height: auto;
-    background-color: white;
+		background-color: white;
 
 		.group-nav {
 			overflow: hidden;
-      background-color: white;
-      &.fixed {
-        position: fixed;
-        width: 100%;
-        top: 0;
-      }
+			background-color: white;
+
+			&.fixed {
+				position: fixed;
+				width: 100%;
+				top: 0;
+			}
+
 			ul {
 				display: flex;
 				align-items: center;
@@ -225,9 +237,10 @@ export default {
 					border-radius: 10px;
 					border: 2px solid rgba(255, 255, 255, 1);
 					margin: 20px 0 20px 20px;
-          &.active {
-            background-color: #6FBC17;;
-          }
+
+					&.active {
+						background-color: #6FBC17;;
+					}
 				}
 			}
 		}

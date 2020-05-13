@@ -1,27 +1,29 @@
+// http://eslint.org/docs/user-guide/configuring
+
 module.exports = {
   root: true,
+  parser: 'babel-eslint',
+  parserOptions: {
+    sourceType: 'module'
+  },
   env: {
+    browser: true,
     node: true
   },
-  'extends': [
-    'plugin:vue/essential',
-    '@vue/standard'
+  // 使用推荐设置
+  // extends: 'lvmama',
+  // required to lint *.vue files
+  plugins: [
+    'html'
   ],
-  rules: {
-    'no-tabs': 0,
-    'no-mixed-spaces-and-tabs': 0,
-    'indent': ["off", "tab"],
-    'no-trailing-spaces': 0,
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    "indent": ["error", "tab"],
-    "no-tabs": "off",
-    "no-multi-spaces": "off",
-    "no-extra-boolean-cast": "off",
-    "no-multiple-empty-lines": "off",
-    "camelcase": ["error", {"allow": ["aa_bb"]}]
-  },
-  parserOptions: {
-    parser: 'babel-eslint'
+  globals: {
+    Vue: true,
+    NativeUtil: true,
+    lvHeader: true,
+    Swiper: true,
+    loginUtil: true,
+    Swipe: true,
+    axios: true,
+    statisticsUtil: true
   }
 }
