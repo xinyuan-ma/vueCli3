@@ -95,20 +95,6 @@ export default {
 			list
 		}
 	},
-	computed: {
-		fiveBlocksPosition () {
-			if (this.fiveBlocksFixed) {
-				if (this.downloadVisible) {
-					return `${this.downloadAppHeight}px`
-					// 为0的话，会出现细微空隙
-				} else {
-					return `-1px`
-				}
-			} else {
-				return ''
-			}
-		}
-	},
 	created () {},
 	mounted () {
 		this.bandScroll()
@@ -116,32 +102,30 @@ export default {
 		this.listScrollTop()
 	},
 	methods: {
-		// 等图片加载好以后，再计算导航栏的位置
+		// 等图片加载好以后执行的方法
 		loadImg () {},
 		// 元素绑定滚动事件
 		bandScroll () {
-			let dom = document.querySelector('.scrollJump')
-			dom.addEventListener('scroll', this.handleScroll)
+			document.querySelector('.scrollJump').addEventListener('scroll', this.handleScroll)
 		},
-		// 获取导航栏距离顶部和自身的高度，已经导航栏最大滚动距离
+		// 获取导航栏的高度和距离顶部的距离，和导航栏最大可滚动的距离
 		fiveBlockBroundClientRect () {
 			let { top, width, height } = this.$refs.fiveBlock.getBoundingClientRect()
 			this.fiveBlockTop = top
 			this.fiveBlocksNavHeight = height
-			this.navMaxScroll = this.$refs.fiveBlockScroll.scrollWidth - width
+			this.navMaxScroll = this.$refs.fiveBlockScroll.scrollWidth - width // 计算导航栏最大可滚动的距离
 		},
 		// 获取锚链接各个区域的位置（距离顶部的距离）
 		listScrollTop () {
 			this.fiveBlocks.forEach(item => {
 				item.top = this.$refs[item.ref][0].getBoundingClientRect().top - this.fiveBlocksNavHeight // fiveBlocksNavHeight是导航栏的高度
-				// console.log(item.top, 'item.top')
 			})
 		},
 		// 让导航栏滚动到屏幕中间
 		navScrollMiddle (index) {
-			let left = this.$refs['navRef' + index][0].offsetLeft + this.$refs['navRef' + index][0].clientWidth / 2 // 计算该元素正中间距离最左边的距离
-			let middleLeft = window.innerWidth / 2 // 屏幕一半的距离
-			let scrollLeft = left - middleLeft
+			let left = this.$refs['navRef' + index][0].offsetLeft + this.$refs['navRef' + index][0].clientWidth / 2 // 计算该元素正中间的位置距离屏幕左边的距离
+			let middleLeft = window.innerWidth / 2 // 屏幕一半的宽度
+			let scrollLeft = left - middleLeft // 计算导航栏需要滚动的距离：如果为负值，导航栏需要滚动到0的位置；如果为正值，导航栏滚动到相应位置，但不能超过最大滚动距离
 			if (scrollLeft > 0) {
 				scrollLeft = Math.min(scrollLeft, this.navMaxScroll)
 			} else if (scrollLeft < 0) {
@@ -156,12 +140,11 @@ export default {
 				let top = item.top // 目标位置
 				this.navScrollMiddle(index)
 				this.noScrolling = true
-				// debugger
 				smooth.smoothScroll(top, this.$refs.scrollJump).then(() => {
 					setTimeout(() => {
 						this.noScrolling = false
 						console.log('滚动加载完')
-					}, 50) // 延迟50ms的作用是反正导航栏出现抖动
+					}, 50) // 延迟50ms的作用是防止导航栏出现抖动
 				})
 			}
 		},
