@@ -1,4 +1,4 @@
-<!--练习inheritAttrs， attrs， $listeners-->
+<!--练习inheritAttrs， $attrs， $listeners-->
 
 <template>
 	<div class="parent">
@@ -19,7 +19,7 @@
 		<child v-bind="$data" message="child" class="prop-child"></child>
 
 		<!--练习$listeners-->
-		<!--使用场景： 孙子组件，调用$listeners可以直接改变父组件的值-->
+		<!--使用场景： 孙子组件，通过$listeners可以直接改变父组件的值， 子组件需要在孙子组件上绑上<grand-son v-on="$listeners"/>-->
 		<p>父组件</p>
 		<child v-bind="$data" message="child" class="prop-child" @change="changeName"></child>
 

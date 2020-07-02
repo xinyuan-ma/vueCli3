@@ -23,6 +23,34 @@ const Vconsole = require('vconsole')
 const vConsole = new Vconsole()
 Vue.use(vConsole)
 // }
+function fa () {
+	return new Promise((resolve, reject) => {
+		setTimeout(() =>  {
+			console.log('fn')
+			resolve(22)
+		}, 1000)
+	})
+}
+let task = [fa]
+
+function fn1 (task) {
+	return new Promise((resolve, reject) => {
+		setTimeout(() =>  {
+			task.forEach(item => {
+				resolve(item())
+			})
+		}, 1000)
+	})
+}
+
+
+async function ff () {
+	let a = await fn1(task)
+	console.log(a)
+}
+ff()
+
+
 Vue.config.productionTip = false
 // Vue.mixin(Mixin)
 new Vue({

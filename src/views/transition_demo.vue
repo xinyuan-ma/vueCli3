@@ -12,9 +12,9 @@
 		</transition>
 
 		<!--使用animate.css动画-->
-		<!--<transition enter-active-class="animated rotateInDownLeft" leave-active-class="animated rotateOutUpLeft">-->
-			<!--<p class="animated" v-if="show">hello</p>-->
-		<!--</transition>-->
+		<transition enter-active-class="animated rotateInDownLeft" leave-active-class="animated rotateOutUpLeft">
+			<p class="animated" v-if="show">hello</p>
+		</transition>
 		<transition
 			appear
 			enter-active-class="animated slideInUp"
@@ -23,7 +23,10 @@
 				<span>{{content}}</span>
 			</div>
 		</transition>
-		<div class="scroll_div" v-for="(item, index) in 10" :key="index">这是第{{item}}div</div>
+
+
+
+		<!--<div class="scroll_div" v-for="(item, index) in 10" :key="index">这是第{{item}}div</div>-->
 
 	</div>
 </template>
