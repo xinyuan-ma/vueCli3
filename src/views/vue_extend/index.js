@@ -3,7 +3,6 @@
 import Vue from 'vue'
 import index from './index.vue'
 let toast = ''
-console.log(11111)
 Vue.prototype.$toast = ({ content }) => {
 	if (toast) {
 		return toast

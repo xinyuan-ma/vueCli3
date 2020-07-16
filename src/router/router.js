@@ -10,6 +10,7 @@ const MobileScroll = r => require.ensure([],
 	() => r(require('../views/mobileScroll/mobileScroll.vue')), 'mobileScroll')
 const Directive = () => import(/* webpackChunkName: "directive" */ '../views/directive_demo.vue')
 const ScrollTest = () => import(/* webpackChunkName: "directive" */ '../views/scrollTest.vue')
+const GuideBtn = () => import(/* webpackChunkName: "guideBtn" */ '../views/guideBtn.vue')
 Vue.use(Router)
 
 export default new Router({
@@ -20,6 +21,11 @@ export default new Router({
 			path: '/',
 			name: 'home',
 			component: Home
+		},
+		{
+			path: '/',
+			name: 'guideBtn',
+			component: GuideBtn
 		},
 		{
 			path: '/title',

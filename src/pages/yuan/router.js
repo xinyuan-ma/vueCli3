@@ -25,6 +25,7 @@ const TestFilter = () => import(/* webpackChunkName: "directive" */ '@/views/fil
 const Ttml2canvas = () => import(/* webpackChunkName: "directive" */ '@/views/html2canvas')
 const TestJinjiangCalendar = () => import(/* webpackChunkName: "directive" */ '@/views/testJinjiangCalendar')
 const TestProp = () => import(/* webpackChunkName: "testProp" */ '@/views/testProp')
+const GuideBtn = () => import(/* webpackChunkName: "testProp" */ '@/views/guideBtn')
 
 Vue.use(Router)
 
@@ -32,6 +33,11 @@ export default new Router({
 // mode: 'history', // http://localhost:8081/yuan/#/
 // base: process.env.BASE_URL,
 	routes: [
+		{
+			path: '/guideBtn',
+			name: 'GuideBtn',
+			component: GuideBtn
+		},
 		{
 			path: '/testProp',
 			name: 'TestProp',
