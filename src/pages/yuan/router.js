@@ -27,6 +27,7 @@ const TestJinjiangCalendar = () => import(/* webpackChunkName: "directive" */ '@
 const TestProp = () => import(/* webpackChunkName: "testProp" */ '@/views/testProp')
 const GuideBtn = () => import(/* webpackChunkName: "testProp" */ '@/views/guideBtn')
 const Echarts = () => import(/* webpackChunkName: "testProp" */ '@/views/test_echarts')
+const Html2canvas = () => import(/* webpackChunkName: "testProp" */ '@/views/test_html2canvas')
 
 Vue.use(Router)
 
@@ -38,6 +39,11 @@ export default new Router({
 			path: '/guideBtn',
 			name: 'GuideBtn',
 			component: GuideBtn
+		},
+		{
+			path: '/html2canvas',
+			name: 'Html2canvas',
+			component: Html2canvas
 		},
 		{
 			path: '/echarts',
