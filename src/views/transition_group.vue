@@ -1,11 +1,11 @@
+/* eslint-disable */
+
 <template>
 	<div id="app">
 
 		<div>
-			<div>Id:<input type="text" v-model="id"></div>
-
-			<div>Name:<input type="text" v-model="name"></div>
-
+			Id:<input type="text" v-model="id">
+			Name:<input type="text" v-model="name">
 			<input type="button" value="添加" @click="add">
 		</div>
 
