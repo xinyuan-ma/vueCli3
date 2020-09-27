@@ -26,7 +26,7 @@ Vue.use(vConsole)
 function fa () {
 	return new Promise((resolve, reject) => {
 		setTimeout(() =>  {
-			console.log('fn')
+			// console.log('fn')
 			resolve(22)
 		}, 1000)
 	})
@@ -46,10 +46,9 @@ function fn1 (task) {
 
 async function ff () {
 	let a = await fn1(task)
-	console.log(a)
+	// console.log(a)
 }
 ff()
-
 
 Vue.config.productionTip = false
 // Vue.mixin(Mixin)
@@ -58,3 +57,40 @@ new Vue({
 	store,
 	render: h => h(App)
 }).$mount('#app')
+
+let obj = {
+  name: 'yuan',
+  arr: [1, [2,3], 4],
+  fn: function () {
+    console.log('fn');
+  },
+  un: undefined,
+  nul: null,
+  reg: /boo/i
+}
+obj.test = obj
+
+// yuan.js?0fad:79 Uncaught RangeError: Maximum call stack size exceeded
+// 死循环
+
+
+function deepClone(val, hash = new WeakMap()) {
+  if (val instanceof Date) return new Date(val)
+  if (val instanceof RegExp) return new RegExp(val)
+  if (val === null) return null
+  if (typeof val != 'object') return val
+  if (hash.get(val)) return hash.get(val);
+  let target = new val.constructor()
+  hash.set(val, target);
+  for (let key in val) {
+    if (val.hasOwnProperty(key)) {
+      target[key] = deepClone(val[key])
+    }
+  }
+  return target
+}
+
+let obj1 = deepClone(obj)
+obj1.arr[1].push(4)
+obj1.arr[2] = 5
+console.log(obj, obj1, '123');

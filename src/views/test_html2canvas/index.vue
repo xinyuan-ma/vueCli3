@@ -17,15 +17,51 @@ export default {
 		return {
 			isLoad: false,
 			changeX: false,
-			changeY: false
+			changeY: false,
+      obj: {
+			  name: 'yuan',
+        arr: [1, [2,3], 4],
+        fn: function () {
+          console.log('fn');
+        },
+        un: undefined,
+        nul: null,
+        reg: /boo/i
+      },
+      arr: [{name:1},{name:2}]
 		}
 	},
-	methods: {
-		async downLoad () {
-			await asyncLoadJs('https://html2canvas.hertzen.com/dist/html2canvas.min.js')
-			this.$nextTick(()=> {
-				this.print('img', 'html2canvas')
-			})
+  mounted() {
+	  // let arr1 = JSON.parse(JSON.stringify(this.arr))
+    // arr1[1].name = 3
+    // console.log(arr1, this.arr, 'arr');
+
+    // let obj1 = JSON.parse(JSON.stringify(this.obj))
+	  let obj1 = this.deepClone(this.obj)
+	  // let obj1 = Object.assign(this.obj)
+    obj1.arr[0] = 5
+    obj1.arr[1].push(4)
+    // console.log(obj1, this.obj, 'obj');
+  },
+  methods: {
+	  deepClone(val) {
+	    if (val instanceof Date) return new Date(val)
+      if (val instanceof RegExp) return new RegExp(val)
+      if (val === null) return null
+      if (typeof val != 'object') return val
+      let target = new val.constructor()
+      for (let key in val) {
+        if (val.hasOwnProperty(key)) {
+          target[key] = this.deepClone(val[key])
+        }
+      }
+	    return target
+    },
+    async downLoad () {
+			// await asyncLoadJs('https://html2canvas.hertzen.com/dist/html2canvas.min.js')
+			// this.$nextTick(()=> {
+			// 	this.print('img', 'html2canvas')
+			// })
 		},
 		//hmtl生成Canvas
 		async print(type, domName) {

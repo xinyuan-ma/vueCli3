@@ -17,7 +17,6 @@ export default {
 			this.show = false
 		},
 		hidden1 () {
-			console.log(222)
 		}
 	}
 }
