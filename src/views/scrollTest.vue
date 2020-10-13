@@ -1,17 +1,24 @@
-/**
-*  该模块测试@scroll 方法，vue自带方法; 判断是否有网
-*/
+<!--/**-->
+<!--*  该模块测试@scroll 方法，vue自带的滚动方法-->
+<!--*/-->
+<!--<template>-->
+<!--	<div class="scrollTest" @scroll="handleScroll">-->
+<!--		<p v-for="(item, key) in 10" :key="key">{{item}}</p>-->
+<!--	</div>-->
+<!--</template>-->
 <template>
-	<div class="scrollTest" @scroll="handleScroll">
-		<p v-for="(item, key) in 10" :key="key">{{item}}</p>
-	</div>
+    <div class="container">
+        <Test1 data="123" name="567"></Test1>
+    </div>
 </template>
 
 <script>
-
+import Test1 from './test/test'
 export default {
 	name: 'scrollTest',
-	components: {},
+	components: {
+      Test1
+    },
 	data: function () {
 		return {
 			show: false,
@@ -26,6 +33,13 @@ export default {
 			console.log('网络关闭', window.navigator.onLine)
 		})
 	},
+  // render () {
+  //   return (
+  //     <div>
+  //     {(<p>{(<span>span标签</span>)}</p>)}
+  //     </div>
+  // )
+  // },
 	methods: {
 		handleScroll () {
 			console.log(123)
@@ -41,4 +55,16 @@ export default {
 			height: 30px;
 		}
 	}
+    .container {
+        background-color: yellowgreen;
+        position: relative;
+        .flex {
+            width: 100px;
+            height: 300px;
+            background-color: red;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    }
 </style>

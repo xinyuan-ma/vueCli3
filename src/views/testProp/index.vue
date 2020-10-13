@@ -7,6 +7,7 @@
 		组件结构： 父组件 → 子组件 → 孙子组件
 		attrs 用作孙子组件获取父组件的数据，不用子组件prop传值给孙子组件-->
 		<p>父组件</p>
+        {{name}}
 		<!--<child :name="name" :age="age" :sex="sex"></child>-->
 		<child v-bind="$data"></child>
 
@@ -46,7 +47,8 @@ export default {
 	},
 	methods: {
 		changeName (val) {
-			this.name = val
+          console.log(val, 'val');
+          this.name = val
 		}
 	}
 }
