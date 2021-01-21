@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<div id="app">
+  <p>姓名</p>
+  <p>{{name}}</p>
+  <p>年龄</p>
+  <p>{{age}}</p>
+</div>
+<script>
+  window.onload = function () {
+    let opt = {el: '#app', data: { name: '加载中', age: 18}}
+    let vue = new Vue(opt)
+    setTimeout(() => {
+      opt.data.name = '小明'
+    }, 3000)
+  }
+
+  class Vue {
+    constructor(opt) {
+      this.opt = opt
+      this.observe(opt.data)
+      this.compile(document.querySelector(opt.el))
+    }
+    observe (obj) {
+      Object.keys(obj).forEach(key => {
+        let observe = new Observe()
+        let value = obj[key]
+        Object.defineProperty(obj,key, {
+          get () {
+            Observe.target && observe.add(Observe.target)
+            return value
+          },
+          set (newValue) {
+            value = newValue
+            observe.update(newValue)
+          }
+        })
+      })
+    }
+    compile (node) {
+      node.childNodes.forEach(child => {
+        if (!child.firstElementChild && /\{\{(.*)\}\}/.test(child.innerHTML)) {
+          let key = RegExp.$1.trim()
+          Observe.target = child
+          child.innerHTML = child.innerHTML.replace(`{{${key}}}`, this.opt.data[key])
+          Observe.target = null
+        }
+      })
+    }
+  }
+  class Observe {
+    constructor() {
+      this.watcherList = []
+    }
+    add (node) {
+      this.watcherList.push(node)
+    }
+    update (value) {
+      this.watcherList.forEach(node => {
+        node.innerHTML = value
+      })
+    }
+  }
+</script>
+</body>
+</html>
