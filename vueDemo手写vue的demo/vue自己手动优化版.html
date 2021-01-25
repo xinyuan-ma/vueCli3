@@ -2,68 +2,65 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-</head>
+  <title>vue的简单实现</title></head>
 <body>
-<div id="app">
-  <p>姓名</p>
+<div id="app"><p>姓名</p>
   <p>{{name}}</p>
   <p>年龄</p>
-  <p>{{age}}</p>
-</div>
+  <p>{{age}}</p></div>
 <script>
   window.onload = function () {
-    let opt = {el: '#app', data: { name: '加载中', age: 18}}
-    let vue = new Vue(opt)
-    setTimeout(() => {
-      opt.data.name = '小明'
-    }, 3000)
+    let vue = new Vue({el: '#app', data: {name: '加载中', age: '18'}})
+    setTimeout(() => vue.$data.name = '小明', 2000)
   }
 
   class Vue {
-    constructor(opt) {
-      this.opt = opt
-      this.observe(opt.data)
-      this.compile(document.querySelector(opt.el))
+    constructor(options) {
+      this.options = options
+      this.$data = options.data
+      this.observe(options.data)
+      this.compile(document.querySelector(options.el))
     }
-    observe (obj) {
-      Object.keys(obj).forEach(key => {
-        let observe = new Observe()
-        let value = obj[key]
-        Object.defineProperty(obj,key, {
-          get () {
-            Observe.target && observe.add(Observe.target)
+
+    observe(data) {
+      Object.keys(data).forEach(key => {
+        let observer = new Observer() // 给data中的每一个属性添加一个观察者对象
+        let value = data[key] // 利用闭包 获取和设置属性的时候，操作的都是value
+        Object.defineProperty(data, key, {
+          get() {
+            Observer.target && observer.add(Observer.target) // 观察者对象添加对应的dom节点
             return value
           },
-          set (newValue) {
+          set(newValue) {
             value = newValue
-            observe.update(newValue)
+            observer.update(newValue) // 属性值变化时，更新观察者中所有节点
           }
         })
       })
     }
-    compile (node) {
-      node.childNodes.forEach(child => {
-        if (!child.firstElementChild && /\{\{(.*)\}\}/.test(child.innerHTML)) {
-          let key = RegExp.$1.trim()
-          Observe.target = child
-          child.innerHTML = child.innerHTML.replace(`{{${key}}}`, this.opt.data[key])
-          Observe.target = null
-        }
+
+    compile(el) {
+      el.childNodes.forEach(child => {
+        if (!child.firstElementChild && /\{\{(.*)\}\}/.test(child.innerHTML)) { // 节点中不存在元素节点且当前节点的文本内容使用{{}}
+          let key = RegExp.$1.trim() // RegExp.$1是正则表达式匹配的第一个字符串，这里对应的就是data中的key值
+          Observer.target = child // 将该节点添加到对应的观察者对象中，在下一行中的this.options.data[key]中触发对应的get方法
+          child.innerHTML = child.innerHTML.replace(`{{${key}}}`, this.options.data[key]) // 将{{key}} 替换成对应的值
+          Observer.target = null
+        } else if (child.firstElementChild) this.compile(child)
       })
     }
   }
-  class Observe {
+
+  class Observer { // 观察者
     constructor() {
       this.watcherList = []
     }
-    add (node) {
+
+    add(node) {
       this.watcherList.push(node)
     }
-    update (value) {
+
+    update(value) {
       this.watcherList.forEach(node => {
         node.innerHTML = value
       })
