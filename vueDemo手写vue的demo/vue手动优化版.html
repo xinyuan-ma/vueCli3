@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>vue的简单实现</title></head>
+<body>
+<div id="app">
+  <p>姓名</p>
+  <p><span>{{name}}</span></p>
+  <p>年龄</p>
+  <p>{{age}}</p>
+  <input v-model="name" type="text">
+  <div>
+    <textarea v-model="name" id="" cols="30" rows="10"></textarea>
+  </div>
+</div>
+<script>
+  window.onload = function () {
+    let vue = new Vue({
+      el: '#app',
+      data: {name: '加载中', age: '18'},
+      mounted () {
+        console.log('mounted');
+      }
+    })
+    setTimeout(() => vue.name = '小明', 2000)
+  }
+
+  class Vue {
+    constructor(options) {
+      this.options = options
+      this.$data = options.data
+      this.proxy(options.data, this)
+      this.observe(options.data)
+      this.compile(document.querySelector(options.el), this)
+      options.mounted.call(this)
+    }
+
+    observe(data) {
+      Object.keys(data).forEach(key => {
+        let observer = new Observer() // 给data中的每一个属性添加一个观察者对象
+        let value = data[key] // 利用闭包 获取和设置属性的时候，操作的都是value
+        Object.defineProperty(data, key, {
+          get() {
+            Observer.target && observer.add(Observer.target) // 观察者对象添加对应的dom节点
+            return value
+          },
+          set(newValue) {
+            value = newValue
+            observer.update(newValue) // 属性值变化时，更新观察者中所有节点
+          }
+        })
+      })
+    }
+
+    compile(el, vm) {
+      el.childNodes.forEach(child => {
+        if (child.nodeType === 1) { // 元素节点
+          let nodeArr = child.attributes
+          Array.from(nodeArr).forEach(attr => {
+            let name = attr.name
+            let exp = attr.value
+            if (name.includes('v-model')) { // 找到v-model的节点
+              Observer.target = child
+              child.value = this.options.data[exp]
+              Observer.target = null
+
+              child.addEventListener('input', e=> { // input textarea select都默认有input事件
+                let newVal = e.target.value
+                vm.$data[exp] = newVal
+              })
+            }
+          })
+        }
+        if (child.nodeType === 3 && /\{\{(.*)\}\}/.test(child.textContent)) { // 文本节点且当前文本内容使用{{}}
+          let key = RegExp.$1.trim() // RegExp.$1是正则表达式匹配的第一个字符串，这里对应的就是data中的key值
+          Observer.target = child // 将该节点添加到对应的观察者对象中，在下一行中的this.options.data[key]中触发对应的get方法
+          child.textContent = child.textContent.replace(`{{${key}}}`, this.options.data[key]) // 将{{key}} 替换成对应的值
+          Observer.target = null
+        }
+        if (child.childNodes && child.childNodes.length) {
+          this.compile(child, vm)
+        }
+      })
+    }
+
+    proxy(data, vm) { // this代理了this.$data,精简写法： vue.name 取的是 vue.$data.name
+      for (let key in data) {
+        Object.defineProperty(vm, key, {
+          get() {
+            return vm.$data[key]; // this.a = {a: 1}
+          },
+          set(newVal) {
+            vm.$data[key] = newVal;
+          }
+        });
+      }
+    }
+  }
+
+  class Observer { // 观察者
+    constructor() {
+      this.watcherList = []
+    }
+    add(node) {
+      this.watcherList.push(node)
+    }
+    update(value) {
+      this.watcherList.forEach(node => {
+        if (node.tagName == 'INPUT' || node.tagName == 'TEXTAREA') {
+          node.value = value
+        } else {
+          node.textContent = value
+        }
+      })
+    }
+  }
+</script>
+</body>
+</html>

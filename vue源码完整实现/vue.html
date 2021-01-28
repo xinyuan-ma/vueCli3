@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<div id="app">
+  <div>{{info.name}}</div>
+  <div>{{info.age}}</div>
+  <p>{{sex}}</p>
+  <input v-model="sex" type="text">
+</div>
+
+<script>
+  window.onload = function () {
+    let vm = new Vue({
+      el: '#app',
+      data: {
+        info: {
+          name: '加载中',
+          age: 18
+        },
+        sex: '男'
+      }
+    })
+    setTimeout(() => {
+      vm.info.name = '小明'
+    }, 3000)
+  }
+
+  class Vue {
+    constructor(options) {
+      this.$data = options.data
+      this.$el = document.querySelector(options.el)
+      this.proxy(this.$data, this)
+      this.observe(options.data)
+      this.compile(this.$el, this)
+    }
+    isObject (data) {
+      if (data && typeof data == 'object') {
+        return this.observe(data)
+      }
+    }
+    observe(data) {
+      let self = this
+      Object.keys(data).forEach(key => {
+        let value = data[key]
+        let dep = new Dep()
+        this.isObject(value)
+        Object.defineProperty(data, key, {
+          get () {
+            Dep.target && dep.add(Dep.target)
+            return value
+          },
+          set (newValue) {
+            value = newValue
+            self.isObject(newValue)
+            dep.update(newValue)
+          }
+        })
+      })
+    }
+    compile (dom, vm) {
+      Array.from(dom.childNodes).forEach(child => {
+        console.log(child, child.nodeType, child.textContent,  'child');
+        if (child.nodeType == 1) { // 元素节点,匹配v-model，如input textArea元素等
+          Array.from(child.attributes).forEach(attr => {
+            if (attr.name.includes('v-model')) {
+              Dep.target = child
+              Dep.target = null
+              child.value = vm.$data[attr.value]
+
+              child.addEventListener('input', (e) => {
+                vm.$data[attr.value] = e.target.value
+              })
+            }
+          })
+        }
+        if (child.nodeType === 3 && /\{\{(.*)\}\}/.test(child.textContent)) { // 找到使用{{}}的元素
+          let key = RegExp.$1.trim()
+          console.log(key, 'key');
+          let keyList = key.split('.') // 匹配data.test.name
+          let value = vm.$data
+          Dep.target = child
+          console.log(keyList, 'keyList');
+          keyList.forEach(key => {
+            value = value[key]
+          })
+          console.log(value, keyList[keyList.length-1], 'value');
+          Dep.target = null
+
+          child.textContent = child.textContent.replace(`{{${key}}}`, value)
+        }
+        if (child.childNodes.length > 0) {
+          this.compile(child, vm)
+        }
+      })
+    }
+    proxy (data, vm) { // this代理 this.data
+      Object.keys(data).forEach(key => {
+        Object.defineProperty(vm, key, {
+          set (newValue) {
+            data[key] = newValue
+          },
+          get () {
+            return data[key]
+          }
+        })
+      })
+    }
+  }
+  class Dep {
+    constructor() {
+      this.dep = []
+    }
+    add (target) {
+      this.dep.push(target)
+    }
+    update (newValue) {
+      this.dep.forEach(node => {
+        if (node.tagName == 'INPUT' || node.tagName == 'TEXTATEA') {
+          node.value = newValue
+        } else {
+          node.textContent = newValue
+        }
+      })
+    }
+  }
+
+
+</script>
+</body>
+</html>
