@@ -36,33 +36,9 @@
     constructor(options) {
       this.$data = options.data
       this.$el = document.querySelector(options.el)
+      observe(options.data)
       this.proxy(this.$data, this)
-      this.observe(options.data)
       this.compile(this.$el, this)
-    }
-    isObject (data) {
-      if (data && typeof data == 'object') {
-        return this.observe(data)
-      }
-    }
-    observe(data) {
-      let self = this
-      Object.keys(data).forEach(key => {
-        let value = data[key]
-        let dep = new Dep()
-        this.isObject(value)
-        Object.defineProperty(data, key, {
-          get () {
-            Dep.target && dep.addSub(Dep.target)
-            return value
-          },
-          set (newValue) {
-            value = newValue
-            self.isObject(newValue)
-            dep.update(newValue)
-          }
-        })
-      })
     }
     compile (dom, vm) {
       Array.from(dom.childNodes).forEach(child => {
@@ -109,6 +85,31 @@
       })
     }
   }
+  function observe (data) {
+    if (data && typeof data == 'object') {
+      return new Observe(data)
+    }
+  }
+  function Observe(data) {
+    Object.keys(data).forEach(key => {
+      let value = data[key]
+      let dep = new Dep()
+      observe(value)
+      Object.defineProperty(data, key, {
+        get () {
+          Dep.target && dep.addSub(Dep.target)
+          return value
+        },
+        set (newValue) {
+          value = newValue
+          observe(newValue)
+          dep.update(newValue)
+        }
+      })
+    })
+  }
+
+
   class Dep {
     constructor() {
       this.subs = []
