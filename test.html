@@ -1,29 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+
+  <style>
+
+  </style>
 </head>
 <body>
-<script>
-
-  class Test {
-    constructor(data) {
-      this.data = data
-      this.fn(data)
-    }
-    fn (dep) {
-      this.dep(dep)
-    }
-    dep (dep) {
-      console.log(dep, 'dep');
-    }
-  }
-
-  let test = new Test('test')
-</script>
+<div class="outer">
+  <div class="inner"></div>
+</div>
 </body>
+
+<script>
+  const dom = new Proxy({}, {
+    get(target, property) {
+      return function(attrs = {}, ...children) {
+        const el = document.createElement(property);
+        for (let prop of Object.keys(attrs)) {
+          el.setAttribute(prop, attrs[prop]);
+        }
+        for (let child of children) {
+          if (typeof child === 'string') {
+            child = document.createTextNode(child);
+          }
+          el.appendChild(child);
+        }
+        return el;
+      }
+    }
+  });
+
+  const el = dom.div({},
+    'Hello, my name is ',
+    dom.a({href: '//example.com'}, 'Mark'),
+    '. I like:',
+    dom.ul({},
+      dom.li({}, 'The web'),
+      dom.li({}, 'Food'),
+      dom.li({}, '…actually that\'s it')
+    )
+  );
+
+  document.body.appendChild(el);
+  console.log(el);
+
+</script>
 </html>
