@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div id="app"></div>
+<script>
+  // 创建虚拟dom类
+  class Element {
+    constructor(type, props, children) {
+      this.type = type
+      this.props = props
+      this.children = children
+    }
+  }
+  // 生产虚拟dom
+  function creatElement(type, props, children) {
+    return new Element(type, props, children)
+  }
+  // 将虚拟dom渲染成真实的dom
+  function render(domObj) {
+    let el = document.createElement(domObj.type)
+    Object.keys(domObj.props).forEach(key => { // 设置属性
+      let value = domObj.props[key]
+      switch (key) {
+        case('value'):
+          if (el.tagName == 'INPUT' || el.tagName == 'TEXTAREA') {
+            el.value = value
+          } else {
+            el.setAttribute(key, value)
+          }
+          break;
+        case('style'):
+          el.style.cssText = value
+          break;
+        default:
+          el.setAttribute(key, value)
+      }
+    })
+
+    domObj.children.forEach(child => {
+      child = child instanceof Element ? render(child) : document.createTextNode(child)
+      renderDom(el, child)
+    })
+
+    return el
+
+
+
+
+
+
+
+
+
+
+
+    // domObj.children.forEach(child => { // 插入子节点
+    //   child = child instanceof Element ? render(child) : document.createTextNode(child) // 判断子节点是否为元素节点，是元素节点，递归遍历；否则是文本节点，直接插入
+    //   renderDom(el, child)
+    // })
+    return el
+  }
+  // 将dom插入到页面内
+  function renderDom(el, target) {
+    el.appendChild(target)
+  }
+  let virtualDom = creatElement('div', {class: 'content'}, [
+    creatElement('li', {class: 'item'}, ['name1']),
+    creatElement('li', {class: 'item'}, ['name2']),
+    creatElement('li', {class: 'item'}, ['name3'])
+  ])
+  renderDom(document.querySelector('#app'), render(virtualDom))
+</script>
+</body>
+</html>
