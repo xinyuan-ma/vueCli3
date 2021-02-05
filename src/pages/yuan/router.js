@@ -28,6 +28,7 @@ const TestProp = () => import(/* webpackChunkName: "testProp" */ '@/views/testPr
 const GuideBtn = () => import(/* webpackChunkName: "testProp" */ '@/views/guideBtn')
 const Echarts = () => import(/* webpackChunkName: "testProp" */ '@/views/test_echarts')
 const Html2canvas = () => import(/* webpackChunkName: "testProp" */ '@/views/test_html2canvas')
+const WebpackLogo = () => import(/* webpackChunkName: "testProp" */ '@/views/webpackLogo')
 
 Vue.use(Router)
 
@@ -36,6 +37,11 @@ export default new Router({
 // base: process.env.BASE_URL,
 	routes: [
 		{
+			path: '/webpackLogo',
+			name: 'WebpackLogo',
+			component: WebpackLogo
+		},
+    {
 			path: '/guideBtn',
 			name: 'GuideBtn',
 			component: GuideBtn
