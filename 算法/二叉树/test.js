@@ -200,7 +200,7 @@ function reconstruction (pre, mid) {
   return node
 }
 
-
+// 重建二叉树
 function reConstructBinaryTree(pre, vin) {
   if(pre.length === 0){
     return null;
@@ -224,4 +224,30 @@ let pre = [1,2,4,7,3,5,6,8]
 let vin = [4,7,2,1,5,3,8,6]
 console.log(reconstruction(pre, vin), 123);
 console.log(reConstructBinaryTree(pre, vin), 123);
+
+// 判断二叉树是否对称（左子树的左节点和对应的右子树的右节点相同，同理左子树的右节点）
+function symmetrical(node1,node2) {
+  if (!node1 && !node2 ) {
+    return true
+  }
+  if (!node1 || !node2) {
+    return false
+  }
+  if (node1.data != node2.data) {
+    return false
+  }
+  return symmetrical(node1.left, node2.right) && symmetrical(node1.right, node2.left)
+}
+
+// 二叉树的景象，思路：递归交换二叉树所有节点左右节点的位置。
+function mirror(root) {
+  if (root) {
+    let temp = root.left
+    root.left = root.right
+    root.right = temp
+    mirror(root.left)
+    mirror(root.right)
+  }
+}
+
 
