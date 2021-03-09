@@ -114,7 +114,7 @@ function getNode(data,node) {
   }
 }
 
-var nums = [6,3,7,2,4,1];
+var nums = [2,1,3];
 
 for (let i = 0; i < nums.length; i++) {
   t.insert(nums[i])
@@ -250,4 +250,28 @@ function mirror(root) {
   }
 }
 
+// 序列化 注意：所有的子节点后序列化为# #
+// 先序遍历[2,1,3] 序列化后的值为 2,1，#，#，3,#,#
+function serialize(root, arr=[]) {
+  if(!root) {
+    arr.push('#')
+  } else {
+    arr.push(root.data)
+    serialize(root.left, arr)
+    serialize(root.right, arr)
+  }
+  return arr.join(',')
+}
 
+console.log(serialize(t.root), 'serialize');
+
+function deTravel(arr) {
+  let node = null
+  const current =  arr.shift()
+  if (current != '#') {
+    node = {data: current}
+    node.left = deTravel(arr)
+    node.right = deTravel(arr)
+  }
+  return node
+}
