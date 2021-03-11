@@ -275,3 +275,109 @@ function deTravel(arr) {
   }
   return node
 }
+
+/**
+ * 判断一个数组是否为二叉树的后序遍历
+ * 思路：
+ * 1)后序遍历的数据结构: 左子树的后序遍历 + 右子树的后序遍历 + root
+ * 2)左子树的值都比root小，右子树的值都比root大。循环数组，找到比root大的第一个下标，以此将数组分为左子树和右子树，然后判断该下标以后的值是否都比root大
+ * 3）然后用同样的判断，以此递归左子树和右子树
+ * */
+
+function verifyTree(queue) {
+  if (queue && queue.length > 0) {
+    let root = queue[queue.length - 1]
+    for (var i = 0; i < queue.length -1; i++) {
+      if (queue[i] > root) {
+        break
+      }
+    }
+    for (var j = i; j < queue.length -1 ; j++) {
+      if (queue[j] < root) {
+        return false
+      }
+    }
+    var left = true
+    if(i>0) {
+      left = verifyTree(queue.slice(0, i))
+    }
+    var right = true
+    if(i< queue.length -1) {
+      right = verifyTree(queue.slice(i, queue.length-1))
+    }
+    return left && right
+  }
+}
+
+/**
+ * 找到和为某一值的路径
+ * */
+function findPath(root, num) {
+  const result = []
+  if(root) {
+    findPathCode(root, num, [], 0, result)
+  }
+  return result
+}
+
+function findPathCode(node, num, stack, sum = 0, result) {
+  stack.push(node.data)
+  sum += node.data
+  if (!node.left && !node.right && sum === target) { // 找到所有的叶子节点路径
+    // if (sum === target) { // 找到所有的节点路径(包含叶子节点和子节点的所有情况之和)
+    result.push(stack.slice(0))
+  }
+  if(node.left) {
+    findPathCode(node.left, num, stack, sum, result)
+  }
+  if(node.right) {
+    findPathCode(node.right,num, stack, sum, result)
+  }
+  stack.pop() // （回溯算法：不符合要求，退回来，换一条路再试）叶子节点直接pop；子节点中的所有的节点递归完成后再pop
+}
+
+/**
+ * 判断pRoot2是否为pRoot1的子结构
+ * */
+function HasSubtree(pRoot1, pRoot2) {
+  let result = false;
+  if (pRoot1 && pRoot2) {
+    if (pRoot1.val === pRoot2.val) {
+      result = compare(pRoot1, pRoot2);
+    }
+    if (!result) {
+      result = HasSubtree(pRoot1.right, pRoot2);
+    }
+    if (!result) {
+      result = HasSubtree(pRoot1.left, pRoot2);
+    }
+  }
+  return result;
+}
+
+
+
+/**
+ * 根据前序遍历和中序遍历的结果 重建二叉树
+ * */
+function rebuild(pre, mid) {
+  if(pre.length == 0) {
+    return null
+  }
+  if(pre.length === 1) {
+    return new Node(pre[0])
+  }
+  let rootValue = pre[0]
+  let index = mid.indexOf(rootValue)
+  let midLeft = mid.slice(0, index)
+  let midRight = mid.slice(index+1)
+
+  let preLeft = pre.slice(1, index+1)
+  let preRight = pre.slice(index+1)
+  let node = new Node(rootValue)
+  node.left = rebuild(preLeft, midLeft)
+  node.right = rebuild(preRight, midRight)
+  return node
+}
+
+console.log(rebuild([1, 2, 4, 7, 3, 5, 6, 8], [4, 7, 2, 1, 5, 3, 8, 6]), 'rebuild');
