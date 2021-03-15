@@ -105,10 +105,23 @@ const link = new LinkedList()
 // link.push(0)
 link.push(1)
 link.push(2)
-link.insert(3, 1)
-// link.insert(4, 2)
-console.log(link, 'link');
+// link.insert(3, 1)
+link.push(3)
+link.push(4)
+link.push(5)
 
+let current = link.head
+let secondNode = null
+for (let i = 0; i <= link.count -1; i++) {
+  if(i == 1) {
+    secondNode = current
+  }
+  if(i == link.count -1) {
+    current.next = secondNode
+  }
+  current = current.next
+}
+console.log(link, 'link');
 
 function toString(node) {
   let current = this.root
@@ -133,7 +146,6 @@ function reversal(head) {
 var reverseList = function (head) {
   let currentNode = null;
   let headNode = head;
-  debugger
   while (head && head.next) {
     currentNode = head.next;
     head.next = currentNode.next;
@@ -142,4 +154,180 @@ var reverseList = function (head) {
   }
   return headNode;
 };
-console.log(reverseList(link.head), '123');
+// console.log(reverseList(link.head), '123');
+
+function EntryNodeOfLoop(head) {
+  if(!head || !head.next) {
+    return null
+  }
+  let p1 = head.next
+  let p2 = head.next.next // p2一次跳两步
+  while (p1 != p2) { // 循环判断是否有环
+    if(p1 == null || p2.next === null) {
+      return null
+    }
+    p1 = p1.next
+    p2 = p2.next.next
+  }
+  console.log(p1, 'p1');
+  // 获取环的长度
+  let temp = p1 // 此时p1 是p1 p2重合的点
+  let length = 1
+  p1 = p1.next
+  while (p1 !== temp) {
+    p1 = p1.next
+    length ++
+  }
+  // 找公共节点
+  p1 = p2 = head // 此时为什么要将p1 p2重新赋值，因为p2只是重合的点，不一定是入口节点
+  while (length-- >0) {
+    p2 = p2.next
+  }
+  while (p1 !== p2) {
+    p1 = p1.next
+    p2 = p2.next
+  }
+  return p1
+}
+
+console.log(EntryNodeOfLoop(link.head), 'entry');
+
+function findKnode(head, k) {
+  if(!head || !k) return null
+  let current = head
+  let target = head
+  let length = 1
+  while (current.next){
+    current = current.next
+    length ++
+    if(length > k) {
+      target = target.next
+    }
+  }
+  if(k > length) return null
+  return target
+}
+
+function findCircle(head) {
+  if(!head || !head.next) return null
+  let step = head.next
+  let step1 = head.next.next
+  while (step != step1) {
+    step = step.next
+    step1 = step1.next.next
+  }
+  let length = 1
+  while (step != step1) {
+    length ++
+    step = step.next
+  }
+  step = step1 = head
+  while (length -- > 0) {
+    step = step.next
+  }
+  while (step != step1) {
+    step = step.next
+    step1 = step1.next
+  }
+  return step
+}
+
+function findCommonNode(head1, head2) {
+  if(!head1 || !head2) return null
+  let length1 = length2 = 0
+  let current1 = head1
+  while (current1) {
+    current1 = current1.next
+    length1 ++
+  }
+  let current2 = head2
+  while (current2) {
+    current2 = current2.next
+    length2 ++
+  }
+  current2 = head2
+  current1 = head1
+  let dec = Math.abs(length2 - length1)
+  while (dec -- > 0) {
+    if (length2 > length1) {
+      current2 = current2.next
+    } else {
+      current1 = current1.next
+    }
+  }
+  while (current1 != current2) {
+    current1 = current1.next
+    current2 = current2.next
+  }
+  return current1
+}
+
+
+function findLastNode(n, m) {
+  if(n <1 || m < 1) return null
+  let head = {val: 0}
+  let current = head
+  for (let i = 1; i < n ; i++) {
+    current.next = {val: i}
+    current = current.next
+  }
+  current.next = head // 此时current是最后一个节点
+  while (current != current.next) { // 最后一个节点 current 等于 current.next
+    for (let i = 0; i < m -1; i++) {
+      current = current.next
+    }
+    current.next = current.next.next
+  }
+  return current.val
+}
+
+function delNode(head, node) {
+  if(head === node) { // node是头节点
+    head = node = null
+  } else if (node.next) { // node是中间节点
+    node.next = node.next.next
+    node.val = node.next.val
+  } else { // node是最后一个节点
+    node = head
+    while (node.next.next) {
+      node = node.next
+    }
+    node.next = null
+    node = null
+  }
+  return node
+}
+
+// 删除重复的节点
+function delRepeatNode(head) {
+  if(!head) return null
+  let map = {}
+  let node = head
+  while (node) {
+    let val = map[node.val]
+    map[node.val] = val ? val + 1 : 1
+    node = node.next
+  }
+  node = head
+  while (node) {
+    let val = map[node.val]
+    if(val > 1) {
+      if(head === node) { // node是头节点
+        head = node = null
+      } else if (node.next) { // node是中间节点
+        node.next = node.next.next
+        node.val = node.next.val
+      } else { // node是最后一个节点
+        node = head
+        while (node.next.next) {
+          node = node.next
+        }
+        node.next = null
+        node = null
+      }
+    } else {
+      node = node.next
+    }
+  }
+  return head
+}
