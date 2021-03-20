@@ -504,3 +504,67 @@ function findFour(arr, target) {
 }
 
 console.log(findFour([-2, -1, -1, 0, 1, 1, 2, 3], 0), 'four');
+
+/**
+ * @function 二分找到有序数组中的目标值下标（注意必须是有序数组才能用二分查找）
+ * 思路：
+ * 比较数组中间值和目标值的大小，小于目标值，缩小范围继续比较中间值
+ * */
+function binarySearch(arr, start, end, target) {
+  if(start > end) return -1
+  let mid = Math.floor((start + end)/2)
+  if(arr[mid] == target) {
+    return mid
+  } else if (arr[mid] < target) {
+    return binarySearch(arr, start, end -1, target)
+  } else {
+    return binarySearch(arr, mid+1, end, target)
+  }
+}
+
+/**
+ * @function 利用二分查找，找到数值中目标值的个数
+ * 思路：
+ * 利用二分查找，找到第一个等于目标值的位置，然后分两种情况
+ * 情况1，目标位置的左侧值，还是等于目标值，继续先左查找，直至找到最左边目标值的下标
+ * 情况2，目标位置的右侧值，还是等于目标值，继续先右查找，直至找到最右边目标值的下标
+ * 然后取左右两者之间的范围差
+ * */
+function getNumberTimes(arr, target) {
+  let left = getFirst(arr,0, arr.length-1, target)
+  let right = getEnd(arr,0, arr.length-1, target)
+  if(left ==-1 || right == -1 ) return -1
+  return right - left + 1
+}
+// 查找第一位等于目标值的下标
+function getFirst(arr, start, end, target) {
+  if(start > end) return -1
+  let mid = Math.floor((start + end)/2)
+  if(arr[mid] == target) {
+    if(arr[mid-1] != target) { // 前一位不等于目标值
+      return mid
+    } else { // 继续先前查找
+      return getFirst(arr, start, mid -1, target)
+    }
+  } else if (arr[mid] > target) {
+    return getFirst(arr, start, mid -1, target)
+  } else {
+    return getFirst(arr, mid+1, end, target)
+  }
+}
+// 查找最后一位等于目标值的下标
+function getEnd(arr, start, end, target) {
+  if(start > end) return -1
+  let mid = Math.floor((start + end)/2)
+  if(arr[mid] == target) {
+    if(arr[mid+1] != target) { // 后一位不等于目标值
+      return mid
+    } else { // 继续往后查找
+      return getEnd(arr, mid+1, end, target)
+    }
+  } else if (arr[mid] > target) {
+    return getEnd(arr, start, mid-1, target)
+  } else {
+    return getEnd(arr, mid+1, end, target)
+  }
+}
