@@ -355,8 +355,6 @@ function HasSubtree(pRoot1, pRoot2) {
   return result;
 }
 
-
-
 /**
  * 根据前序遍历和中序遍历的结果 重建二叉树
  * */
