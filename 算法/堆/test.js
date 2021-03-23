@@ -82,4 +82,54 @@ function heapSort(A) {
 
 let Arr = [49, 38, 65, 97, 76, 13, 27, 49, 75, 165, -5]
 heapSort(Arr);
-console.log(Arr)
+// console.log(Arr)
+
+
+
+/**
+ * @function 输入n个整数，找出其中最小的K个数。例如输入4,5,1,6,2,7,3,8这8个数字，则最小的4个数字是1,2,3,4
+ * 时间复杂度： 先排序，再取前k个数，最小时间复杂度nlogn； 使用堆的话，时间复杂度为nlogk(这也是堆的最重要意义)
+ * 思路：
+ * 1）用n个整数，把前k个数构建一个大顶堆（大顶堆：所有子节点不大于父节点，根节点的值最大）
+ * 2）从第k个数开始，和大顶堆的最大值进行比较，若比最大值小，交换两个数的位置，重新构建前k个数构建一个大顶堆
+ * （目的是不断将最大值替换到最后）；比如用前k个数构建一次大顶堆，则这k个数中最大值就变成了根节点，然后跟节点又被后面的小值替换
+ * 3）一次遍历之后大顶堆里的数就是整个数据里最小的k个数
+ * */
+function GetLeastNumbers(input, k) {
+  if (k > input.length) {
+    return [];
+  }
+  createHeap(input, k);
+  for (let i = k; i < input.length; i++) {
+    // 当前值比最小的k个值中的最大值小
+    if (input[i] < input[0]) {
+      [input[i], input[0]] = [input[0], input[i]];
+      ajustHeap(input, 0, k);
+    }
+  }
+  return input.splice(0, k);
+}
+
+// 构建大顶堆
+function createHeap(arr, length) {
+  for (let i = Math.floor(length / 2) - 1; i >= 0; i--) { // 堆中，父节点为i，则子节点为2*i+1、2*i+2；反过来，知道了子节点为length,则最后一个子节点为Math.floor(length / 2) - 1。
+    ajustHeap(arr, i, length); // 调整大顶堆，将最大值逐步替换成根节点
+  }
+}
+
+// 调整大顶堆，从右到左，从下到上，将最大值逐步替换成根节点，当调节根节点时，对应的子节点如果发生替换，要重新调整下对应子节点，保证都满足子节点不大于父节点的条件
+// 比如，当调节根节点时，[a0, a1, a2], a2> a0, a2替换a0，则要重新调节a2这个分支上的节点，保证都满足子节点不大于父节点的条件
+function ajustHeap(arr, index, length) {
+  for (let i = 2 * index + 1; i < length; i = 2 * i + 1) { // 父节点为i，则子节点为2*i+1
+    if (i + 1 < length && arr[i + 1] > arr[i]) { // 找到子节点为2*i+1、2*i+2的最大值
+      i++;
+    }
+    if (arr[index] < arr[i]) {
+      [arr[index], arr[i]] = [arr[i], arr[index]]; // 子节点中的最大值和父节点替换位置
+      index = i;
+    } else {
+      break;
+    }
+  }
+}
+console.log(GetLeastNumbers([2, 7, 4, 5, 6], 3), 'get');
