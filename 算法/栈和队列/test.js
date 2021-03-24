@@ -225,6 +225,7 @@ console.log(palindromeChecker('abcba'), 123) // true 当前为回文
  * @function 给定一个数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口 k 内的数字。滑动窗口每次只向右移动一位.返回滑动窗口最大值。
  * 教程：http://www.conardli.top/docs/dataStructure/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC.html#%E9%A2%98%E7%9B%AE
 *       https://mp.weixin.qq.com/s/RORQ-2KMMnPMGUxfIjTn3A
+*  思路： 利用双端队列（队列两侧都可以剔除元素），窗口移动的过程中，始终保证window中最左侧的元素为当前窗口的最大值
  * */
 function maxSlidingWindow(nums, k) {
   const window = []; // 存储当前窗口中的数据
