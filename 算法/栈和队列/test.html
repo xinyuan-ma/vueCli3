@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<div class="parent">
+  <div class="child"></div>
+  <div class="content">栈和队列</div>
+</div>
+<script src="./test.js"></script>
+<script>
+  let dom = document.querySelector('.parent')
+  let content = document.querySelector('.content')
+  // dom.addEventListener('scroll', () => {
+  //   let scrollTop = dom.scrollTop
+  //   let top = scrollTop * 0.6
+  //   console.log(top, 'scrollTop');
+  //   content.style.transform = `translateY(${top}px)`
+  // })
+</script>
+<style>
+  .parent {
+    height: 300px;
+    background: #2a6496;
+    width: 100%;
+    overflow: auto;
+    position: relative;
+  }
+  .child {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    background: #4cae4c;
+    height: 500px;
+    z-index: -1;
+  }
+</style>
+</body>
+</html>
