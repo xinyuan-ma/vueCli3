@@ -227,20 +227,19 @@ console.log(palindromeChecker('abcba'), 123) // true 当前为回文
 *       https://mp.weixin.qq.com/s/RORQ-2KMMnPMGUxfIjTn3A
  * */
 function maxSlidingWindow(nums, k) {
-  const window = [];
-  const result = [];
-  debugger
+  const window = []; // 存储当前窗口中的数据
+  const result = []; // 存储窗口中的最大值
   for (let i = 0; i < nums.length; i++) {
-    if (i - window[0] > k - 1) {
-      window.shift();
+    if (i - window[0] > k - 1) { // 窗口不断往右移动，当最大值在窗口最左侧，但窗口的长度超出k时的情况，就要把左侧的最大值剔除，比如窗口为【3,-1,-3】，继续往右时，就要把左侧的3剔除
+      window.shift(); // 剔除窗口长度超出范围时左侧的最大值
     }
-    let j = window.length - 1;
-    while (j >= 0 && nums[window[j]] <= nums[i]) {
-      j--;
+    let j = window.length - 1; // 获取窗口中元素最后一个值的下标
+    while (j >= 0 && nums[window[j]] <= nums[i]) { // 当前窗口的值依次和要插入的值做比较，如果小于要插入的值，剔除掉该值，直到window为空为止（保证window中最左侧的值为最大值）
+      j--;  // 依次比较
       window.pop();
     }
-    window.push(i);
-    if (i >= k - 1) {
+    window.push(i); // 添加右侧新加入的值，插入新值时有两种情况：1、新值为最大值时，则window此时为空；2、新值不为最大值时，window已剔除掉比新值小的值。 始终保证window中最左侧的值为最大值
+    if (i >= k - 1) { // 窗口是从0开始移动，当移动的距离，大于等于目标范围后，以后再往后移动一次，就要写入当前窗口的最大值
       result.push(nums[window[0]]);
     }
   }
@@ -256,36 +255,36 @@ console.log(maxSlidingWindow([1, 3, -1, -3, 5, 3, 6, 7], 3));
  https://mp.weixin.qq.com/s/RORQ-2KMMnPMGUxfIjTn3A
  * */
 
-function hotPotato(elementsList, num) {
-  // 创建一个容器
-  const queue = new Queue()
-  const elimitatedList = []
-  // 把元素(参赛者)加入队列中
-  for (let i = 0, len = elementsList.length; i < len; i++) {
-    queue.enqueue(elementsList[i])
-  }
-
-  /**
-   * 击鼓传花
-   * 首先队列规则: 先进先出
-   * 那么在传花过程中,任何一个元素都可能是前端, 在传花的过程中应该就是前端位置不断变化.
-   * 当喊停的时(num 循环完), 也就是花落在谁手(谁在前端)则会被淘汰*（移除队列）
-   */
-
-  while (queue.size() > 1) {
-    for (let j = 0; j < num; j++) {
-      queue.enqueue(queue.dequeue())
-    }
-    elimitatedList.push(queue.dequeue())
-  }
-  return {
-    winer: queue.dequeue(),
-    elimitatedList
-  }
-}
-
-const arrT = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
-console.log(hotPotato(arrT, Math.ceil(Math.random() * 10))) // { winer: 5, elimitatedList: [4, 8, 2, 7, 3,10, 9, 1, 6]}
-console.log(hotPotato(arrT, Math.ceil(Math.random() * 10))) // { winer: 5, elimitatedList: [4, 8, 2, 7, 3,10, 9, 1, 6]}
-console.log(hotPotato(arrT, Math.ceil(Math.random() * 10))) // { winer: 8, elimitatedList: [10, 1, 3, 6, 2,9, 5, 7, 4]}
+// function hotPotato(elementsList, num) {
+//   // 创建一个容器
+//   const queue = new Queue()
+//   const elimitatedList = []
+//   // 把元素(参赛者)加入队列中
+//   for (let i = 0, len = elementsList.length; i < len; i++) {
+//     queue.enqueue(elementsList[i])
+//   }
+//
+//   /**
+//    * 击鼓传花
+//    * 首先队列规则: 先进先出
+//    * 那么在传花过程中,任何一个元素都可能是前端, 在传花的过程中应该就是前端位置不断变化.
+//    * 当喊停的时(num 循环完), 也就是花落在谁手(谁在前端)则会被淘汰*（移除队列）
+//    */
+//
+//   while (queue.size() > 1) {
+//     for (let j = 0; j < num; j++) {
+//       queue.enqueue(queue.dequeue())
+//     }
+//     elimitatedList.push(queue.dequeue())
+//   }
+//   return {
+//     winer: queue.dequeue(),
+//     elimitatedList
+//   }
+// }
+//
+// const arrT = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+//
+// console.log(hotPotato(arrT, Math.ceil(Math.random() * 10))) // { winer: 5, elimitatedList: [4, 8, 2, 7, 3,10, 9, 1, 6]}
+// console.log(hotPotato(arrT, Math.ceil(Math.random() * 10))) // { winer: 5, elimitatedList: [4, 8, 2, 7, 3,10, 9, 1, 6]}
+// console.log(hotPotato(arrT, Math.ceil(Math.random() * 10))) // { winer: 8, elimitatedList: [10, 1, 3, 6, 2,9, 5, 7, 4]}
