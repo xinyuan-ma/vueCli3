@@ -1,4 +1,3 @@
-
 /**
  * 队列的教程 https://segmentfault.com/a/1190000018132297
  * @function 队列的实现（先进先出，从后面插入，从前面删除）
@@ -7,16 +6,20 @@ class Queue {
   constructor() {
     this.arr = []
   }
+
   insert(val) {
     this.arr.push(val)
   }
+
   del() {
     return this.arr.shift()
   }
-  print () {
+
+  print() {
     console.log(this.arr.toString());
   }
 }
+
 let queue = new Queue()
 queue.insert(1)
 queue.insert(2)
@@ -31,13 +34,16 @@ class Stack {
   constructor() {
     this.arr = []
   }
+
   insert(val) {
     this.arr.push(val)
   }
+
   del() {
-   return this.arr.pop()
+    return this.arr.pop()
   }
-  print () {
+
+  print() {
     console.log(this.arr.toString())
   }
 }
@@ -58,29 +64,33 @@ class Element {
     this.priority = priority
   }
 }
+
 class PriorityQueue {
   constructor() {
     this.arr = []
   }
+
   insert(val, priority) {
     let node = new Element(val, priority)
     let result = false
     for (let i = 0; i < this.arr.length; i++) {
-      if(priority < this.arr[i].priority) {
-        this.arr.splice(i,0, node)
+      if (priority < this.arr[i].priority) {
+        this.arr.splice(i, 0, node)
         result = true
         break
       }
     }
-    if(!result) {
+    if (!result) {
       this.arr.push(node)
     }
     return node
   }
-  del () {
+
+  del() {
     return this.arr.shift()
   }
-  print () {
+
+  print() {
     let str = ''
     this.arr.forEach(item => {
       str += `${item.val}:${item.priority} `
@@ -88,11 +98,12 @@ class PriorityQueue {
     console.log(str)
   }
 }
+
 let priorityQueue = new PriorityQueue()
-priorityQueue.insert(3,3)
-priorityQueue.insert(2,2)
-priorityQueue.insert(4,4)
-priorityQueue.insert(1,1)
+priorityQueue.insert(3, 3)
+priorityQueue.insert(2, 2)
+priorityQueue.insert(4, 4)
+priorityQueue.insert(1, 1)
 priorityQueue.del()
 priorityQueue.print()
 
@@ -107,6 +118,7 @@ class Deque {
     this.count = 0
     this.lowestCount = 0
   }
+
   addFront(ele) {
     if (this.isEmpty()) {
       this.items[this.count] = ele
@@ -182,7 +194,7 @@ class Deque {
       return ''
     }
     let objString = `${this.items[this.lowestCount]}`
-    for (let i = this.lowestCount + 1; i < this.count; i++){
+    for (let i = this.lowestCount + 1; i < this.count; i++) {
       objString = `${objString}, ${this.items[i]}`
     }
     return objString
@@ -224,8 +236,8 @@ console.log(palindromeChecker('abcba'), 123) // true 当前为回文
 /**
  * @function 给定一个数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口 k 内的数字。滑动窗口每次只向右移动一位.返回滑动窗口最大值。
  * 教程：http://www.conardli.top/docs/dataStructure/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC.html#%E9%A2%98%E7%9B%AE
-*       https://mp.weixin.qq.com/s/RORQ-2KMMnPMGUxfIjTn3A
-*  思路： 利用双端队列（队列两侧都可以剔除元素），窗口移动的过程中，始终保证window中最左侧的元素为当前窗口的最大值
+ *       https://mp.weixin.qq.com/s/RORQ-2KMMnPMGUxfIjTn3A
+ *  思路： 利用双端队列（队列两侧都可以剔除元素），窗口移动的过程中，始终保证window中最左侧的元素为当前窗口的最大值
  * */
 function maxSlidingWindow(nums, k) {
   const window = []; // 存储当前窗口中的数据
@@ -289,3 +301,26 @@ console.log(maxSlidingWindow([1, 3, -1, -3, 5, 3, 6, 7], 3));
 // console.log(hotPotato(arrT, Math.ceil(Math.random() * 10))) // { winer: 5, elimitatedList: [4, 8, 2, 7, 3,10, 9, 1, 6]}
 // console.log(hotPotato(arrT, Math.ceil(Math.random() * 10))) // { winer: 5, elimitatedList: [4, 8, 2, 7, 3,10, 9, 1, 6]}
 // console.log(hotPotato(arrT, Math.ceil(Math.random() * 10))) // { winer: 8, elimitatedList: [10, 1, 3, 6, 2,9, 5, 7, 4]}
+
+/**
+ * @function 用两个栈实现一个队列
+ * 栈的特点： 先进后出。 队列的特点：先进先出（注意：队列不存在从后面删除最后一个元素的情况，只能从头开始删除）
+ * */
+
+class StackMakeQueue {
+  constructor() {
+    this.stack1 = [] // 该栈存入push的值
+    this.stack2 = [] // 该栈用于删值使用
+  }
+  push(val) {
+    this.stack1.push(val)
+  }
+  del() {
+    if(this.stack2.length === 0) { // 注意：只有stack2为空值，才将stack1的值批量插入进来，否则会造成顺序错乱
+      while(this.stack1.length > 0) {
+        this.stack2.push(this.stack1.pop())
+      }
+    }
+    return this.stack2.pop() || null
+  }
+}
