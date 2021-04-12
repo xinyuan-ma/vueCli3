@@ -1,4 +1,14 @@
-// 单例模式
+/**
+ * 设计模式比较全，案例简单  https://juejin.cn/post/6844903607452581896
+ * 案例以及对应模式的应用场景 https://juejin.cn/post/6844903918330347533#heading-3
+ */
+
+/**
+ * @type 单例模式
+ * 确保只有一个实例、可以全局访问
+ *
+ * 应用案例：弹框
+ * */
 class Single {
   constructor(name) {
     this.name = name
@@ -6,8 +16,8 @@ class Single {
   getName() {
     console.log(this.name);
   }
-  static getInstance (name) {
-    if(!this.instance) {
+  static getInstance (name) { // 静态方法
+    if(!this.instance) { // 关键代码 this指向的是Single这个构造函数，构造函数也是一个对象，相当于在Single这个对象上添加了一个instance属性
       this.instance = new Single(name)
     }
     return this.instance
@@ -18,7 +28,10 @@ let single1 = Single.getInstance('1')
 let single2 = Single.getInstance('2')
 console.log(single1 === single2);
 
-// 策略模式
+/**
+ * @type 根据不同的类型执行不同的策略
+ * 策略模式一般要用到复杂函数
+ * */
 let demo = {
   'demo1': function (value) {
     return value * 1
@@ -61,8 +74,7 @@ const proxyImage = (function () {
     }
   }
 })()
-
-proxyImage.setSrc('https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fyouimg1.c-ctrip.com%2Ftarget%2Ftg%2F035%2F063%2F726%2F3ea4031f045945e1843ae5156749d64c.jpg&refer=http%3A%2F%2Fyouimg1.c-ctrip.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1620722264&t=0e694870625d3918bd8f17d3b7d36bd1')
+proxyImage.setSrc('https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2530486543,113586312&fm=26&gp=0.jpg')
 
 /**
  * 缓存代理
@@ -134,12 +146,8 @@ class Event {
 }
 
 let event = new Event()
-event.on('click', function (a) {
-  console.log(a);
-})
-event.on('click', function (a,b) {
-  console.log(a,b);
-})
+event.on('click', function (a) {console.log(a);})
+event.on('click', function (a,b) {console.log(a,b);})
 event.emit('click', 1,2)
 
 /**
@@ -170,30 +178,128 @@ console.log(data.name);
  * @type 装饰者模式  https://juejin.cn/post/6844903503266054157#heading-4
  * 适用场景： 动态地给函数赋能，在不改变对象自身的基础上，在程序运行期间给对象动态地添加方法
  * */
-Function.prototype.before = function (beforeFn) {
-  let self = this // this指向func
+function fuc() {
+  console.log(2);
+}
+Function.prototype.before = function (beFn) {
+  let self = this
   return function () {
-    beforeFn.apply(this, arguments) // this指向windows
-    return self.apply(this, arguments)
+    beFn.apply(this, arguments) // 先执行插入到前面的方法，类似于二叉树的前序遍历
+    return self.apply(this, arguments) // 后执行当前的方法
   }
 }
-Function.prototype.after = function (afterFn) {
-  let self = this // this指向 before返回的函数
+Function.prototype.after = function (afFn) {
+  let self = this
   return function () {
-    let ret = self.apply(this, arguments) // this指向windows
-    afterFn.apply(this, arguments)
-    return ret
+    self.apply(this,arguments) // 先执行当前的方法
+    return afFn.apply(this,arguments) // 后执行插入到后面的方法
   }
 }
-var func = function() {
-  console.log('2');
+
+function fuc1() {
+  console.log(1);
 }
-//func1和func3为挂载函数
-var func1 = function() {
-  console.log('1');
+function fuc3() {
+  console.log(3);
 }
-var func3 = function() {
-  console.log('3');
+function fuc4() {
+  console.log(4);
 }
-func = func.before(func1).after(func3)
-func()
+
+fuc = fuc.before(fuc1).before(fuc4).after(fuc3)
+fuc()
+
+/**
+ * @type 装饰者模式
+ * 原理：为对象添加新功能；不改变其原有的结构和功能，即原有功能还继续会用，且场景不会改变。
+ * 案例：在原来方法的基础上去装饰一些针对特别场景所适用的方法，即添加一些新功能
+ * 案例教程： https://juejin.cn/post/6844903918330347533#heading-18
+ * */
+class Dop {
+  constructor() {}
+  draw () {
+    console.log('draw');
+  }
+}
+class Decorator {
+  constructor(obj) {
+    this.obj = obj
+  }
+  draw () {
+    this.obj.draw()
+    this.append()
+  }
+  append () {
+    console.log('append');
+  }
+}
+
+let dre = new Dop()
+let dec = new Decorator(dre)
+dec.draw() // 它重写了实例对象的draw方法，给其方法新增了一个setRedBorder()，因此最后为其输出结果进行了装饰
+
+
+/**
+ * @type 组合模式
+ *
+ * 组合模式在对象间形成树形结构;
+   组合模式中基本对象和组合对象被一致对待;
+   无须关心对象有多少层, 调用时只需在根部进行调用;
+ **/
+class Combine {
+  constructor() {
+    this.list = []
+  }
+  add(fn) {
+    this.list.push(fn)
+    return this // 链式调用
+  }
+  excute() {
+    for (let i = 0; i < this.list.length; i++) {
+      this.list[i].excute()
+    }
+  }
+}
+let comb1 = new Combine()
+comb1.add({excute () {console.log(1);}}).add({excute () {console.log(2);}})
+
+let comb2 = new Combine()
+comb2.add({excute () {console.log(3);}}).add({excute () {console.log(4);}})
+
+let comb3 = new Combine()
+comb3.add({excute () {console.log(5);}}).add({excute () {console.log(6);}})
+comb2.add(comb3)
+
+let comb4 = new Combine()
+comb4.add(comb1).add(comb2)
+console.log(comb4, 'comb4');
+comb4.excute()
+
+/**
+ * @type 工厂模式：工厂模式最直观的地方在于，创建产品对象不是通过直接new产品类实现，而是通过工厂方法实现。
+ * 1、将 new 操作单独封装，只对外提供相应接口（直观的表现生成一个对象，没有看到new的过程）
+ * 2、遇到new 时，就要考虑是否应该使用工厂模式
+ *
+ * 应用场景
+ * 使用jquery时，直接用window.$很方便，不需要自己调用new jQuery。底层已经将new出来的对象挂载到window.$上， 代码： window.$ = function(selector) {return new jQuery(selector)}
+ * */
+class Car {
+  constructor(name, color) {
+    this.name = name
+    this.color = color
+  }
+}
+class Factory {
+  static create (type) {
+    switch (type) {
+      case 'car': return new Car('汽车', '白色'); break;
+      case 'bicycle': return new Car('自行车', '白色'); break;
+      default: console.log('没有该类型');
+    }
+  }
+}
+let p1 = Factory.create('car')
+let p2 = Factory.create('bicycle')
+console.log(p1, p1 instanceof Car, 'Factory');
+console.log(p2, p2 instanceof Car, 'Bicycle');
+
