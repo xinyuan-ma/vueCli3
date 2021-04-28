@@ -293,6 +293,7 @@ console.log(fn1(1)(2)(3)(4));
 
 /**
  * 偏函数
+ * 定义：偏函数会固定你传入的几个参数，再一次性接受剩下的参数
  * */
 const partialFunc = (func, ...args) => {
   let placeholderNum = 0
@@ -313,10 +314,231 @@ const partialFunc = (func, ...args) => {
 let partial = partialFunc(fn, 1,2)
 console.log(partial(3, 4));
 
-[1,3,3,4].forEach(item => {
-  console.log(item);
-  if(item > 2) {
-    return
+// 最简单的偏函数
+function partialFn(fn, ...arg) {
+  return (...arg1) => fn.apply(this, [...arg, ...arg1])
+}
+
+let f2 = partialFn(fn,1,2)
+console.log(f2(3, 4));
+
+// 支持占位符的偏函数，但只支持第一次调用的参数可以使用占位符
+function partialNewFn(fn, ...arg) {
+  let place = 0;
+  return (...arg1) => {
+    arg1.forEach(val => {
+      let index = arg.findIndex(item => item === '_')
+      if(index < 0) return
+      arg[index] = val
+      place ++
+    })
+    if(place.length < arg1.length) {
+      arg1 = arg1.slice(place, arg1.length)
+    }
+    return fn.apply(this, [...arg, ...arg1])
   }
-  console.log(11);
+}
+let f3 = partialNewFn(fn,1,2)
+console.log(f3(3, 4));
+
+
+
+/**
+ * 函数防抖，应用场景搜索框输入文字后调用搜素接口
+ * 原理：利用闭包，不管触发频率多高，在停止触发n秒后才会执行，如果重复触发，会清空之前的定时器，重新计时，直到最后一次n秒后执行
+ * 坑点：debounce的返回值，不能是箭头函数，箭头函数的this指向定义时的执行上下文的this
+ * 知识点：
+ * 1、使用setTimeout后，timer值不变，只是把对应的定时器清空。所以函数执行后，要设置timer为null，以便以后调用第一次扔可以执行
+ * 2、flag控制第一次是否触发
+ * 3、一段时间内重复触发，会清空之前的定时器，然后重新计时
+ * http://www.conardli.top/docs/JavaScript/%E9%98%B2%E6%8A%96.html#%E5%8E%9F%E7%90%86
+ * */
+function debounce (fn, time, flag) { // flag 控制第一次是否立即执行
+  let timer = null
+  return function (...args)  { // 不能返回箭头函数
+    timer && clearTimeout(timer) // 在time时间段内重复执行，会清空之前的定时器，然后重新计时
+    if(flag && !timer) { // flag为true 第一次默认执行
+      fn.apply(this, args)
+    }
+    timer = setTimeout(() => { // 使用setTimeout后，timer值不变，只是把对应的定时器清空
+      fn.apply(this, args)
+      timer = null // 函数执行完后，初始化timer，方便下次再调用时，第一次仍然会执行
+    },time)
+  }
+}
+let debounceFn = debounce(fn, 1000, true)
+debounceFn(1,2)
+
+/**
+ * 函数节流,应用场景：下拉滚动加载
+ * 原理：利用闭包，不管触发频率多高，每隔一段时间内执行一次
+ * 坑点：throttle的返回值，不能是箭头函数，箭头函数的this指向定义时的执行上下文的this
+ * 知识点：
+ * 1、利用闭包，每隔一段时间内，执行一次函数，同时重置timer
+ * 2、flag控制第一次是否立即触发
+ *
+ * 在vue中如何使用
+ * <div class="scale" @scroll="handleScroll()">
+ * 正确的方式：scrollData: throttle(function () {this.makeData(this.name,this.age)}, 500, true)
+ * 错误的方式：scrollData: throttle(this.makeData, 500, true) // this为undefined
+ * handleScroll () {this.scrollData()},
+ * makeData (a,b) {console.log(a, b, 'ab');}
+ *
+ * http://www.conardli.top/docs/JavaScript/%E8%8A%82%E6%B5%81.html#%E5%AE%9A%E4%B9%89
+ * */
+function throttle(event, time, flag) {
+  let timer = null;
+  return function (...args) { // 不能返回箭头函数
+    if(flag && !timer) { // flag控制第一次是否立即执行
+      event.apply(this, args);
+    }
+    if (!timer) {
+      timer = setTimeout(() => {
+        timer = null;
+        event.apply(this, args);
+      }, time);
+    }
+  }
+}
+
+
+/**
+ * 图片的懒加载（当图片出现在屏幕中时再加载对应的图片）
+ * 原理：判断图片出现在视口时，给img.src 赋值对应的图片链接。使用IntersectionObserver 监听元素来判断是否出现了视口
+ *
+ * IntersectionObserver 的教程http://www.ruanyifeng.com/blog/2016/11/intersectionobserver_api.html
+ * IntersectionObserver的用法
+ * 1、let observer = new IntersectionObserver( targetList=> console.log(targetList) // 通过回调函数获取元素的状态
+ * 2、observer.observe(dom) // 监听元素； observer.unobserve(dom) // 取消对应的监听
+ * 3、回调的数据是一个数组，表示监听的所有元素的状态; 数组中的target表示监听的dom对象
+ * 4、intersectionRatio大于0，来判断元素是否出现在视口，intersectionRatio初始值为0
+ * 5、元素出现和离开视口，这两种情况下都可以触发回调
+ * 6、IntersectionObserver去掉了监听scroll事件来判断元素是否在视口中，性能更高
+ * 7、IntersectionObserver的兼容性还好，高版本的浏览器都已支持
+ *
+ * http://www.conardli.top/docs/JavaScript/%E5%9B%BE%E7%89%87%E6%87%92%E5%8A%A0%E8%BD%BD.html#intersectionobserver
+ * */
+
+// html内容 <img src="loading.gif" data-src="https://img-pub01.visitshanghai.com.cn/district_chongming.jpg" alt="">
+function observerImg() {
+  let imgList = document.getElementsByTagName('img') // 获取所有的图片元素
+  let observer = new IntersectionObserver(list => { // 回调的数据是一个数组
+    list.forEach(item => {
+      if(item.intersectionRatio > 0) { // 判断元素是否出现在视口
+        item.target.src = item.target.getAttribute('data-src') // 设置img的src属性
+        observer.unobserve(item.target) // 设置src属性后，停止监听
+      }
+    })
+  })
+  for (let i = 0; i < imgList.length; i++) {
+    observer.observe(imgList[i]) // 监听每个img元素
+  }
+}
+
+/**
+ * new 关键字
+ *
+ * js的new操作符到底做了什么？
+ * 1、生成一个对象
+ * 2、该对象的原型指向构造函数的原型
+ * 3、调用构造函数，构造函数的this指向生成的对象
+ * 4、判断构造函数是否有返回值，如果有返回值则返回值是一个对象，则返回该值；否则返回新生成的对象
+ *
+ *  构造函数有返回值的案例：
+ * function Dog(name) { this.name = name return {test:1} }
+ * let obj = new Dog('ming') // obj为 {test:1}
+ * 备注：如果返回值不是一个对象，则返回构造函数的实例
+ * new关键字的教程 https://juejin.cn/post/6844903937405878280
+ * */
+const selfNew = function (fn, ...args) {
+  let instance = Object.create(fn.prototype) // 创建一个对象，该对象的原型是fn.prototype
+  let res = fn.apply(instance, args) // 调用构造函数，this指向新生成的对象，给新生成的对象上添加对应的属性
+  return res instanceof Object ? res : instance // 如果fn函数有返回值，并且返回值是一个对象，则返回该对象，否则返回新生成的对象
+}
+
+/**
+ * 实现instanceof 判断对象是否为该构造函数的实例
+ * obj instanceof Object :表示Object的prototype是否在obj的原型链上
+ * */
+function isInstance(obj, origin) {
+  let proto = obj.__proto__;
+  if(proto) {
+    if(proto === origin.prototype) {
+      return true
+    } else {
+      return isInstance(proto, origin)
+    }
+  } else {
+    return false
+  }
+}
+function Dog() {}
+let dog = new Dog()
+console.log(isInstance(dog, Dog), isInstance(dog, Object)); // true true
+
+/**
+ * 洗牌算法
+ * */
+function disorder(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    let randomIndex = Math.floor(Math.random() * (arr.length-1)); // 获取随机数
+    [arr[i], arr[randomIndex]] = [arr[randomIndex], arr[i]]; // 交互位置
+  }
+  return arr
+}
+
+console.log(disorder([1,2,3,4,5, 6, 7, 8]));
+
+/**
+ * 单例模式
+ * */
+class Single {
+  constructor(name) {
+    this.name = name
+  }
+  static getInstance (name) {
+    if(!this.instance) {
+      this.instance = new Single(name)
+    }
+    return this.instance
+  }
+}
+
+let instance1 = Single.getInstance('1')
+let instance2 = Single.getInstance('2')
+console.log(instance1 === instance2);
+
+
+/**
+ * 优雅处理async await
+ * 备注：以后所有使用async await的地方都要加上try catch
+ * 查看案例1，当promise 发生错误返回reject时, async await 没有then函数，无法捕获异常，所以要使用try catch捕获错误
+ * */
+
+// 案例1
+let p = new Promise((resolve, reject) => {
+  reject(1)
 })
+async function tryFn() {
+  try {
+    let res = await p
+  } catch (e) {
+    console.log(e, 'e');
+  }
+}
+tryFn()
+
+// 优雅处理
+async function capture(promise) {
+  try {
+    let res = await promise
+    return [null, res]
+  } catch (e) {
+    return [e, null]
+  }
+}
+async function fnc () {
+  let [err, res] = await capture(p)
+  console.log(err, res, 'res');
+}
+fnc()
