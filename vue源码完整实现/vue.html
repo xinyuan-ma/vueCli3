@@ -79,10 +79,10 @@
           Array.from(child.attributes).forEach(attr => {
             if (attr.name.includes('v-model')) {
               Dep.target = child
-              child.value = vm.$data[attr.value]
+              child.value = vm[attr.value]
               Dep.target = null
               child.addEventListener('input', (e) => {
-                vm.$data[attr.value] = e.target.value
+                vm[attr.value] = e.target.value
               })
             }
           })
