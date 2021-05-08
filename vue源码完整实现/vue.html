@@ -33,9 +33,9 @@
         }
       }
     })
-    console.log(vm.sum, 'sum');
     setTimeout(() => {
       vm.info.name = '小明'
+      vm.sex = 'man'
     }, 3000)
   }
 
@@ -51,7 +51,7 @@
     }
     isObject (data) {
       if (data && typeof data == 'object') {
-        return this.observe(data)
+        this.observe(data)
       }
     }
     observe(data) {
@@ -67,7 +67,7 @@
           },
           set (newValue) {
             value = newValue
-            self.isObject(newValue)
+            self.isObject(newValue) // 这里的this指向data
             dep.update(newValue)
           }
         })
@@ -75,14 +75,12 @@
     }
     compile (dom, vm) {
       Array.from(dom.childNodes).forEach(child => {
-        // console.log(child, child.nodeType, child.textContent,  'child');
         if (child.nodeType == 1) { // 元素节点,匹配v-model，如input textArea元素等
           Array.from(child.attributes).forEach(attr => {
             if (attr.name.includes('v-model')) {
               Dep.target = child
-              Dep.target = null
               child.value = vm.$data[attr.value]
-
+              Dep.target = null
               child.addEventListener('input', (e) => {
                 vm.$data[attr.value] = e.target.value
               })
