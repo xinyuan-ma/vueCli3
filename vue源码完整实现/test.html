@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div id="app">
+  <p>{{name}}</p>
+  <p>{{age}}</p>
+  <p>{{sex}}</p>
+  <p>{{sum}}</p>
+  <input type="text" v-model="sex">
+  <textarea v-model="age"></textarea>
+</div>
+<script type="text/javascript">
+  window.onload = function () {
+    let vm = new Vue({
+      data: {
+        name:"ming",
+        age: 18,
+        sex: '男'
+      },
+      el: '#app',
+      computed: {
+        sum() {
+          return this.age + 1
+        }
+      }
+    })
+    console.log(vm.sum);
+    setTimeout(() => {
+
+      vm.age = 20
+      vm.sex = 'man'
+    }, 2000)
+  }
+  class Vue {
+    constructor(options) {
+      this.$data = options.data
+      this.observe(this.$data)
+      this.proxy(this.$data, this)
+      options.computed && this.initComputed(options.computed, this)
+      this.compile(document.querySelector(options.el))
+    }
+    observe (data) {
+      if(data && typeof data == 'object') {
+        this.observer(data, this)
+      }
+    }
+    observer (data, target) {
+      let self = target
+      Object.keys(data).forEach(key => {
+        let value = data[key]
+        let dep = new Dep()
+        self.observe(value)
+        Object.defineProperty(data, key, {
+          set(newValue) {
+            self.observe(newValue)
+            value = newValue
+            dep.notify(newValue)
+          },
+          get() {
+            Dep.target && dep.add(Dep.target)
+            return value
+          }
+        })
+      })
+    }
+    compile(dom) {
+      Array.from(dom.childNodes).forEach(node => {
+        if(node.nodeType === 1) {
+          Array.from(node.attributes).forEach(attr => {
+            if(attr.name.includes('v-model')) {
+              let key = attr.value
+              Dep.target = node
+              node.value = this[key]
+              node.addEventListener('input', e => {
+                console.log(e, 'this[key]');
+                this[key] = e.target.value
+              })
+            }
+          })
+          if(node.childNodes.length > 0) {
+            this.compile(node)
+          }
+        } else if (node.nodeType === 3 && /\{\{(.*)\}\}/.test(node.textContent)) {
+          let key = RegExp.$1
+          Dep.target = node
+          node.textContent = node.textContent.replace(`{{${key}}}`, this[key])
+          Dep.target = null
+        }
+      })
+    }
+    proxy(data, target) {
+      Object.keys(data).forEach(key => {
+        Object.defineProperty(target, key, {
+          set (value) {
+            data[key] = value
+          },
+          get () {
+            return data[key]
+          }
+        })
+      })
+    }
+    initComputed (data, target) {
+      Object.keys(data).forEach(key => {
+        Object.defineProperty(data, key, {
+          set () {},
+          get: typeof data[key] === 'function' ? data[key].bind(target) : data[key].get.bind(target)
+        })
+      })
+      Object.keys(data).forEach(key => {
+        Object.defineProperty(target, key, {
+          set () {},
+          get () {
+            console.log(key);
+            console.log(data[key]);
+            return data[key]
+          }
+        })
+      })
+    }
+  }
+  class Dep {
+    constructor() {
+      this.watcherList = []
+    }
+    add (node) {
+      this.watcherList.push(node)
+    }
+    notify(value) {
+      this.watcherList.forEach(node => {
+        console.log(node, 'node');
+        if(node.tagName == 'INPUT' || node.tagName == 'TEXTAREA') {
+          node.value = value
+        } else {
+          node.textContent = value
+        }
+      })
+    }
+  }
+
+</script>
+</body>
+</html>

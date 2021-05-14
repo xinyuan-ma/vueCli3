@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<p>index.html</p>
+<button onclick="send()">点我</button>
+<button onclick="newOpen()">打开新页面</button>
+<iframe id="otherPage" src="http://10.105.108.233:8082" frameborder="0"></iframe>
+<script type="text/javascript">
+  function send () {
+    var iframeWin = document.getElementById("otherPage").contentWindow;
+    iframeWin.postMessage('测试', 'http://10.105.108.233:8082/')
+  }
+  function newOpen () { window.open('test.html')}
+    // window.newOpen('http://localhost:63342/vueCli3/postMessage/test.html?_ijt=7bd5kf9c1uddspesbqpras4a2v')
+
+
+  window.addEventListener('message', e => {
+    console.log(e, '测试接收');
+  })
+</script>
+</body>
+</html>

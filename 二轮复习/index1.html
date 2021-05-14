@@ -24,66 +24,33 @@
           name: '加载中',
           age: 18
         },
-        sex: '男',
-        num: 1
-      },
-      computed: {
-        sum () {
-          return vm.num + 1
-        }
+        sex: '男'
       }
     })
-    console.log(vm.sum, 'sum');
     setTimeout(() => {
       vm.info.name = '小明'
-      vm.sex = 'man'
     }, 3000)
   }
 
   class Vue {
     constructor(options) {
-      this.$options = options
       this.$data = options.data
       this.$el = document.querySelector(options.el)
+      observe(options.data)
       this.proxy(this.$data, this)
-      this.observe(options.data)
-      if (options.computed) this.initComputed(this) // initComputed在proxy和observe后执行，可以获取通过this[key]获取data中的数据
       this.compile(this.$el, this)
     }
-    isObject (data) {
-      if (data && typeof data == 'object') {
-        this.observe(data)
-      }
-    }
-    observe(data) {
-      let self = this
-      Object.keys(data).forEach(key => {
-        let value = data[key]
-        let dep = new Dep()
-        this.isObject(value)
-        Object.defineProperty(data, key, {
-          get () {
-            Dep.target && dep.add(Dep.target)
-            return value
-          },
-          set (newValue) {
-            value = newValue
-            self.isObject(newValue) // 这里的this指向data
-            dep.update(newValue)
-          }
-        })
-      })
-    }
     compile (dom, vm) {
-      Array.from(dom.childNodes).forEach(child => {
+      dom.childNodes.forEach(child => {
         if (child.nodeType == 1) { // 元素节点,匹配v-model，如input textArea元素等
           Array.from(child.attributes).forEach(attr => {
             if (attr.name.includes('v-model')) {
               Dep.target = child
-              child.value = vm[attr.value]
               Dep.target = null
+              child.value = vm.$data[attr.value]
+
               child.addEventListener('input', (e) => {
-                vm[attr.value] = e.target.value
+                vm.$data[attr.value] = e.target.value
               })
             }
           })
@@ -117,31 +84,42 @@
         })
       })
     }
-    initComputed (vm) {
-      let computed = vm.$options.computed
-      Object.keys(computed).forEach(key => {
-        Object.defineProperty(computed, key, {
-          set () {},
-          get: typeof computed[key] === 'function' ? computed[key] : computed[key].get
-        })
-        Object.defineProperty(vm, key, { // vm 代理computed
-          get() {
-           return computed[key]
-          }
-        })
-      })
+  }
+  function observe (data) {
+    if (data && typeof data == 'object') {
+      observer(data)
     }
   }
+  function observer(data) {
+    Object.keys(data).forEach(key => {
+      let value = data[key]
+      let dep = new Dep()
+      observe(value)
+      Object.defineProperty(data, key, {
+        get () {
+          Dep.target && dep.addSub(Dep.target)
+          return value
+        },
+        set (newValue) {
+          value = newValue
+          observe(newValue)
+          dep.update(newValue)
+        }
+      })
+    })
+  }
+
+
   class Dep {
     constructor() {
-      this.dep = []
+      this.subs = []
     }
-    add (target) {
-      this.dep.push(target)
+    addSub (target) {
+      this.subs.push(target)
     }
     update (newValue) {
-      this.dep.forEach(node => {
-        if (node.c == 'INPUT' || node.tagName == 'TEXTATEA') {
+      this.subs.forEach(node => {
+        if (node.tagName == 'INPUT' || node.tagName == 'TEXTATEA') {
           node.value = newValue
         } else {
           node.textContent = newValue
@@ -149,7 +127,6 @@
       })
     }
   }
-
 
 </script>
 </body>

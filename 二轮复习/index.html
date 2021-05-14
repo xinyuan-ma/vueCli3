@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>vue的简单实现</title></head>
+<body>
+<div id="app">
+  <p>姓名</p>
+  <p>{{name}}</p>
+  <p>年龄</p>
+  <p>{{age}}</p>
+</div>
+<script>
+  window.onload = function () {
+    let vue = new Vue({
+      el: '#app',
+      data: {
+        name: 'ming',
+        age: 18
+      }
+    })
+    setTimeout(() => {
+      vue.$data.name = 'ls'
+      vue.$data.age = 19
+    }, 2000)
+  }
+  class Vue {
+    constructor(options) {
+      this.$data = options.data
+      this.observer(options.data)
+      this.compile(document.querySelector(options.el))
+    }
+    observer(data) {
+      Object.keys(data).forEach(key => {
+        let value = data[key]
+        let dep = new Dep()
+        Object.defineProperty(data, key, {
+          get() {
+            Dep.target && dep.add(Dep.target)
+            return value
+          },
+          set(newValue) {
+            value = newValue
+            dep.update(newValue)
+          }
+        })
+      })
+    }
+    compile(el) {
+      el.childNodes.forEach(node => {
+        if(!node.firstElementChild && /\{\{(.*)\}\}/.test(node.innerHTML)) {
+          let key = RegExp.$1
+          Dep.target = node
+          node.innerHTML = node.innerHTML.replace(`{{${key}}}`, this.$data[key])
+          Dep.target = null
+        } else if(node.firstElementChild) {
+          this.compile(node)
+        }
+      })
+    }
+  }
+  class Dep {
+    constructor() {
+      this.watcherList = []
+    }
+    add (node) {
+      this.watcherList.push(node)
+    }
+    update(value) {
+      this.watcherList.forEach(node => {
+        node.innerHTML = value
+      })
+    }
+  }
+
+</script>
+</body>
+</html>

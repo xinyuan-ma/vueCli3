@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>练习虚拟dom</title>
+</head>
+<body>
+<div id="app"></div>
+</body>
+<script type="text/javascript">
+  class Element {
+    constructor(type, prop, child) {
+      this.type = type;
+      this.prop = prop;
+      this.child = child;
+    }
+  }
+  function createElement(type, prop, child) {
+    return new Element(type, prop, child)
+  }
+  function render(node) {
+    let el = document.createElement(node.type)
+    Object.keys(node.prop).forEach(key => {
+      let value = node.prop[key]
+      switch (key) {
+        case ('value'):
+          if(el.tagName == 'input' || el.tagName == 'textarea') {
+            el.value = value
+          } else {
+            el.setAttribute(key, value)
+          }
+          break;
+        case ('style'):
+          el.style.cssText = value
+          break;
+        default:
+          el.setAttribute(key, value)
+      }
+    })
+    node.child.forEach(child => {
+      child = child instanceof Element ? render(child) : document.createTextNode(child)
+      append(el, child)
+    })
+    return el
+  }
+
+  function append(el, dom) {
+    el.appendChild(dom)
+  }
+  append(document.querySelector('#app'), render(createElement('div', {class: 'content'}, [
+    createElement('li', {style: 'color:red'}, ['item1']),
+    createElement('li', {style: 'color:yellow'}, ['item2']),
+    createElement('li', {style: 'color:blue'}, ['item3'])
+  ])))
+</script>
+</html>
