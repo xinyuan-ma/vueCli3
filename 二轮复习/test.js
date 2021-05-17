@@ -1595,46 +1595,311 @@ console.log(car, bicycle, 'car');
 
 // 大文件上传和断点续传
 
+function selfMap(fn, content) {
+  let arr = this.slice()
+  let list = []
+  for (let i = 0; i < arr.length; i++) {
+    if(!arr.hasOwnProperty(i)) continue;
+    list[i] = fn.call(content, arr[i])
+  }
+  return list
+}
+Array.prototype.selfMap = selfMap;
+console.log([1, 2, 3].selfMap(item => item * 2));
+
+function selfFlat(deep=1) {
+  let arr = this.slice()
+  if(deep == 0) return arr
+  return arr.reduce((pre,cur) => {
+    if(Array.isArray(cur)) {
+      return [...pre, ...cur.selfFlat(deep-1)]
+    } else {
+      return [...pre, cur]
+    }
+  }, [])
+}
+Array.prototype.selfFlat = selfFlat;
+console.log([1, 2, 3,[4,[5]]].selfFlat(1));
+
+function curry(fn) {
+  if(fn.length <=1) return fn
+  function generator(...args) {
+    if(args.length === fn.length) {
+      return fn(...args)
+    } else {
+      return (...arg1) => {
+        return generator(...arg1, ...args)
+      }
+    }
+  }
+  return generator
+}
+function testFn(a,b,c,d) {
+  console.log(a + b + c + d, 'abcd');
+  return a+b+c+d
+}
+let curryFn = curry(testFn)
+console.log(curryFn(1)(2)(3)(4));
+
+// 函数防抖
+function debounce(fn, time, flag) { // flag 控制第一次是否执行
+  let timer = null
+  return function (...args) {
+    timer && clearTimeout(timer)
+    if(flag && !timer) {
+      fn.apply(this, args)
+    }
+    timer = setTimeout(()=> {
+      fn.apply(this, args)
+      timer = null
+    },time)
+  }
+}
+let debounceFn = selfDebounce(testFn, 2000, true)
+debounceFn(...[1,1,2,3])
+debounceFn(...[1,1,2,3])
+debounceFn(...[1,1,2,3])
+debounceFn(...[1,1,2,3])
+
+function mydeepClone(target, hash= new WeakMap()) {
+  if(!myIsObject(target)) return target
+  if(hash.get(target)) return hash.get(target)
+  let obj = Array.isArray(target) ? [] : {}
+  hash.set(target, obj)
+  for (const key in target) {
+    if(target.hasOwnProperty(key)) {
+      if(myIsObject(target[key])) {
+        obj[key] = mydeepClone(target[key], hash)
+      } else {
+        obj[key] = target[key]
+      }
+    }
+  }
+  return obj
+}
+function myIsObject(target) {
+  return target && typeof target === 'object'
+}
+let myObj = {name: {age:18}, arr: [{name:1}]}
+myObj.target = myObj
+let cloneObj = mydeepClone(myObj)
+myObj.name.age = 20
+myObj.arr[0].name = 2
+console.log(myObj,cloneObj);
+
+// 函数防抖 用于搜索框搜素
+function selfDebounce(fn,time, flag) {
+  let timer = null
+  return function (...args) {
+    timer && clearTimeout(timer)
+    if(flag && !timer) {
+      fn.apply(this, args)
+    }
+    timer = setTimeout(() => {
+      fn.apply(this, args)
+      timer = null
+    }, time)
+  }
+}
+
+function selfThrottle(fn, time, flag) {
+  let timer = null;
+  let control = flag;
+  return function (...args) {
+    if(control) {
+      fn.apply(this, args)
+      control = false
+    }
+    if(!timer) {
+      timer = setTimeout(() => {
+        fn.apply(this, args)
+        timer = null;
+      }, time)
+    }
+  }
+}
 
 
+function myThrottle(fn, time, flag) {
+  let timer = null
+  let control = flag
+  return function (...args) {
+    if(control) {
+      fn.apply(this, args)
+      control = false
+    }
+    if(!timer) {
+      timer = setTimeout(()=> {
+        fn.apply(this, args)
+        timer = null
+      }, time)
+    }
+  }
+}
 
 
+// 图片懒加载 原理：判断图片出现在视口时，给图片赋值对应的url链接，使用IntersectionObserver
+function observerImg() {
+  let imgList = document.getElementsByTagName('img')
+  let observer = new IntersectionObserver(items => {
+    items.forEach(item => {
+      let dom = item.target
+      if(item.intersectionRatio > 0) {
+        dom.src = dom.getAttribute('data-src')
+        observer.unobserve(dom)
+      }
+    })
+  })
+  for (let i = 0; i < imgList.length; i++) {
+    observer.observe(imgList[i])
+  }
+}
+
+function myClass(fn,...args) {
+  let obj = Object.create(fn.prototype)
+  let instance = fn.apply(obj,args)
+  return instance instanceof Object ? instance : obj
+}
+function Dog(name) {
+  this.name = name
+}
+let dog = new Dog('ming')
+console.log(myClass(Dog, 'ming'));
+
+function myInstance(obj, fn) {
+  let proto = obj.__proto__
+  if(proto) {
+    if(proto === fn.prototype) {
+      return true
+    } else {
+      return myInstance(proto, fn)
+    }
+  } else {
+    return false
+  }
+}
+
+console.log(myInstance(dog, Object));
+
+// 洗牌算法
+function mixInArr(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    let index = Math.floor(Math.random() * (arr.length -1))
+    [arr[i], arr[index]] = [arr[index], arr[i]]
+  }
+  return arr
+}
+
+function newdebounce(fn, time, flag) {
+  let timer = null
+  return function (...args) {
+    timer && clearTimeout(timer)
+    if(flag && !timer) {
+      fn.apply(this, args)
+    }
+    timer = setTimeout(() => {
+      fn.apply(this, args)
+      timer = null
+    },time)
+  }
+}
+
+function newthrottle(fn, time, flag) {
+  let timer = null
+  let control = flag
+  return function (...args) {
+    if(control) {
+      fn.apply(this, args)
+      control = false
+    }
+    if(!timer) {
+      timer = setTimeout(() => {
+        fn.apply(this, args)
+        timer = null
+      },time)
+    }
+  }
+}
 
 
+// vue3
+// <p ref=box><p>
+// 通过ref获取该dom
+function setup() {
+  let box = ref(null)
+  onMounted( ()=> {
+    console.log(box.value); // 获取p标签
+  })
+  return {box}
+}
+
+// 大文件上传
+// 将大文件进行切片
+function createFileList(file, size) { // size每个切片的大小
+  let fileList = []
+  let cur = 0
+  while (cur < file.size) {
+    fileList.push({file: file.slice(cur, cur + size)})
+    cur += size
+  }
+  return fileList
+}
+// 请求逻辑
+function request({url, method='post', data, headers={}, requestList}) {
+  return new Promise(resolve => {
+    let xhr = new XMLHttpRequest()
+    xhr.open(method, url)
+    Object.keys(headers).forEach(key => {
+      xhr.setRequestHeader(key, header[key])
+    })
+    xhr.send(data)
+    xhr.upload.onprogress = e => {
+      console.log(e.loaded); //获取已上传的文件大小
+    }
+    xhr.onload = e => {
+      resolve({
+        data: e.target.response
+      })
+    }
+  })
+}
+
+function requestList(fileList) {
+  let xhrList = []
+  fileList.forEach(item => {
+    let data = new FormData
+    data.append('file', item.file)
+    xhrList.push(request({data}))
+  })
+  Promise.all(xhrList).then(e => {
+    console.log(e);
+  })
+}
+// 斐波那契数列 1 1 2 3 5 8 13 21
+function fib(n) {
+  let dp = []
+  dp[0] = 1n
+  dp[1] = 1n
+  for (let i = 2; i <= n; i++) {
+    dp[i] = dp[i-1] + dp[i-2]
+  }
+  return dp[n]
+}
+
+console.log(fib(7));
 
 
+function selfFib(n) {
+  let arr = []
+  arr[0] = 1
+  arr[1] = 1
+  for (let i = 2; i <=n ; i++) {
+   arr[i] = arr[i-1] + arr[i-2]
+  }
+  return arr[n]
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+console.log(selfFib(7));
 
 
 
