@@ -1091,7 +1091,6 @@ heapSort(Arr)
 // console.log(Arr);
 
 function getMinNumber(arr, k) {
-  if (k > arr.length) return []
   createHeap(arr, k)
   for (let i = k; i < arr.length; i++) {
     if (arr[i] < arr[0]) {
@@ -1736,7 +1735,6 @@ function myThrottle(fn, time, flag) {
     }
   }
 }
-
 
 // 图片懒加载 原理：判断图片出现在视口时，给图片赋值对应的url链接，使用IntersectionObserver
 function observerImg() {

@@ -14,7 +14,7 @@
   <p>{{sex}}</p>
   <input v-model="sex" type="text">
 </div>
-
+<script src="test.js"></script>
 <script>
   class Vue {
     constructor(options) {
@@ -50,7 +50,6 @@
     }
     compile (dom, vm) {
       Array.from(dom.childNodes).forEach(child => {
-        console.log(child, child.nodeType, child.textContent,  'child');
         if (child.nodeType == 1) { // 元素节点,匹配v-model，如input textArea元素等
           Array.from(child.attributes).forEach(attr => {
             if (attr.name.includes('v-model')) {
@@ -66,15 +65,12 @@
         }
         if (child.nodeType === 3 && /\{\{(.*)\}\}/.test(child.textContent)) { // 找到使用{{}}的元素
           let key = RegExp.$1.trim()
-          console.log(key, 'key');
           let keyList = key.split('.') // 匹配data.test.name
           let value = vm.$data
           Dep.target = child
-          console.log(keyList, 'keyList');
           keyList.forEach(key => {
             value = value[key]
           })
-          console.log(value, keyList[keyList.length-1], 'value');
           Dep.target = null
 
           child.textContent = child.textContent.replace(`{{${key}}}`, value)

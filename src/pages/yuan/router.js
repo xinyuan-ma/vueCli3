@@ -29,6 +29,7 @@ const GuideBtn = () => import(/* webpackChunkName: "testProp" */ '@/views/guideB
 const Echarts = () => import(/* webpackChunkName: "testProp" */ '@/views/test_echarts')
 const Html2canvas = () => import(/* webpackChunkName: "testProp" */ '@/views/test_html2canvas')
 const WebpackLogo = () => import(/* webpackChunkName: "testProp" */ '@/views/webpackLogo')
+const Compoent = () => import(/* webpackChunkName: "testProp" */ '@/views/compoent.vue')
 
 Vue.use(Router)
 
@@ -36,6 +37,11 @@ export default new Router({
 // mode: 'history', // http://localhost:8081/yuan/#/
 // base: process.env.BASE_URL,
 	routes: [
+    {
+      path: '/compoent',
+      name: 'Compoent',
+      component: Compoent
+    },
 		{
 			path: '/webpackLogo',
 			name: 'WebpackLogo',

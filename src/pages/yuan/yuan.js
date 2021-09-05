@@ -20,8 +20,13 @@ import 'xe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 import FilterExcel from '../../components/FilterExcel'
-import XEUtils from 'xe-utils'
+// import XEUtils from 'xe-utils'
 
+// import {install} from 'yjy-ui'
+
+// console.log(install, 'install');
+
+// install(Vue)
 Vue.use(Table)
 Vue.use(TableColumn)
 // if (process.env.NODE_ENV !== 'production') {
@@ -87,13 +92,7 @@ function fn1(task) {
   })
 }
 
-
-async function ff() {
-  let a = await fn1(task)
-  // console.log(a)
-}
-
-ff()
+console.log('加载main');
 
 Vue.config.productionTip = false
 // Vue.mixin(Mixin)
