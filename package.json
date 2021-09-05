@@ -30,7 +30,7 @@
     "vxe-table": "^2.9.24",
     "webpack-spritesmith": "^1.1.0",
     "xe-utils": "^2.7.14",
-    "xlsx": "^0.15.6",
+    "xlsx": "^0.17.0",
     "yjy-ui": "^1.0.6"
   },
   "devDependencies": {
